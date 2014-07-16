@@ -1,0 +1,162 @@
+//http://www.maxdesign.com.au/articles/css-layouts/three-fixed/
+
+#container
+{
+	margin: 0 auto;
+	width: 1000px;
+	background: #fff;
+}
+
+#header
+{
+	background: #fff;
+	padding: 20px;
+}
+
+#header-title{
+    font-size: 26pt;
+    font-weight: bold;
+    margin-left: 100px;
+    //color: darkred;
+}
+
+#header h1 { margin: 0; }
+
+#nonavigation{   
+	width: 1000px;
+        height: 30px;
+	background: #800000;
+}
+
+#navigation-left
+{
+	float: left;
+	width: 499px;
+	background: #800000;
+}
+
+#navigation-right
+{
+	float: right;
+	width: 492px;
+	background: #800000;
+}
+
+
+.navigation ul
+{
+	margin: 0 10px 0 0;
+	padding: 0;
+}
+
+.navigation ul li
+{
+	list-style-type: none;
+	display: inline;
+}
+
+#navigation-left li a
+{
+	display: block;
+	float: left;
+	padding: 5px 10px;
+	color: #fff;
+	text-decoration: none;
+	border-right: 1px solid #fff;
+}
+
+#navigation-right li a
+{
+	display: block;
+	float: right;
+	padding: 5px 10px;
+	color: #fff;
+	text-decoration: none;
+	//border-right: 1px solid #fff;
+}
+
+#logout-text{
+    text-align: right
+}
+
+.navigation li a:hover { background: #501414 }
+
+#content-container
+{
+	float: left;
+	width: 1000px;
+	background: #fff url(/wp-content/uploads/layout-three-fixed-background.gif) repeat-y 100% 0;
+}
+
+#section-navigation
+{
+	float: left;
+	width: 160px;
+	padding: 20px 0;
+	margin: 0 20px;
+	display: inline;       
+}
+
+#section-navigation ul
+{
+	margin: 0;
+	padding: 0;
+}
+
+#section-navigation ul li
+{
+	margin: 0 0 1em;
+	padding: 0;
+	list-style-type: none;
+}
+
+#content
+{
+	float: left;
+	width: 500px;
+	padding: 20px 0;
+	margin: 0 0 0 30px;
+}
+
+#login-form
+{
+        text-align: center;
+	float: left;
+	width: 500px;
+	padding: 20px 0;
+	margin: 0 0 0 30px;
+}
+
+#login-form input
+{
+    margin: 5px 5px 5px 5px;
+}
+
+#content h2 { margin: 0; }
+
+#aside
+{
+	float: right;
+	width: 200px;
+	padding: 20px 0;
+	margin: 0 20px 0 0;
+	display: inline;
+}
+
+#aside h3 { margin: 0; }
+
+#error_message{
+    color: red;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+#footer
+{
+	clear: left;
+	background: #800000;
+	text-align: left;
+	padding: 20px;
+        font-size: 12px;
+	height: 1%;
+}
