@@ -4,14 +4,8 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
-    <head>
-        <title>Home</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width">
-        <link type="text/css" rel="stylesheet" href="<?php echo base_url();?>/assets/css/mystyle.css">
-    </head>
-    <body>
+
+
         <div id="container">           
             <div class ="navigation" id="navigation-left">
                     <ul>
@@ -23,7 +17,7 @@ and open the template in the editor.
             </div>
              <div class ="navigation" id="navigation-right">
                     <ul>
-                            <li><a href="#">Logout</a></li>
+                            <li><a href="<?php echo base_url();?>home/logout">Logout</a></li>
                                                         
                     </ul>                 
             </div>
@@ -61,5 +55,4 @@ and open the template in the editor.
                    
             </div>
         </div>
-    </body>
-</html>
+    

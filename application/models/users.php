@@ -20,4 +20,9 @@ class Users extends CI_Model{
         $query = $this->db->get();
         return $query->row();
     }
+    
+    public function get_password_by_username($username){
+        $query = $this->db->get_where('users', array('username' => $username));
+        return $query->row();
+    }
 }

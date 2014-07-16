@@ -13,8 +13,8 @@ class Login_Validation extends CI_Controller {
 
         $this->load->library('form_validation');
 
-        $this->form_validation->set_rules('username', 'Username', 'callback_username_check');
-        $this->form_validation->set_rules('password', 'Password', 'required');
+        $this->form_validation->set_rules('username', 'Username', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'callback_password_check');
        // $this->form_validation->set_message('required', 'Your custom message here');
         $this->form_validation->set_error_delimiters('<div class="error">', '</div>');
    
@@ -27,22 +27,32 @@ class Login_Validation extends CI_Controller {
         }
         else
         {
-               $this->load->view('apps/header');
-               $this->load->view('apps/home');
-               $this->load->view('apps/footer');
+            $this->load->library('session');
+            
+            $user_session = array(
+                //'session_id' => uniqid(),
+                'username' => $this->input->post('username'),
+                'login' => TRUE,
+            );
+            $this->session->set_userdata($user_session);
+       
+            $this->load->view('apps/header');
+            $this->load->view('apps/home');
+            $this->load->view('apps/footer');
         }
     }       
     
-    public function username_check($str){
-       $users = $this->users->get_users();
-       foreach($users as $user){
-           if ($str === $user['username'] && filter_input(INPUT_POST, 'password') === $user['password'])
-            {             
-                    return TRUE;
-            }
-       }
+    public function password_check($str){
+        $username_input = $this->input->post('username');
+       $user = $this->users->get_password_by_username($username_input);
+       
+       if (!empty($user) && $str === $user->password)
+        {             
+                return TRUE;
+        }
+
         
-       $this->form_validation->set_message('username_check', "<div id = 'error_message'>Username or password incorrect!</div>");
+       $this->form_validation->set_message('password_check', "<div id = 'error_message'>Incorrect username or password!</div>");
         return FALSE;     
     }
     
