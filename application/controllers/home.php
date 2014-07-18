@@ -5,48 +5,33 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Home extends CI_Controller {
     
     
-    public function index($page = 'home'){
-        $this->load->helper('url');
+    public function index($page = 'home'){       
+        $this->load->helper(array('url','admission_helper'));       
         $this->load->library('session');
 
-        if($this->is_logged_in()){
-            $this->load->view('apps/header');
+        if(is_logged_in()){
+            $data['title'] = 'Home';
+            $this->load->view('apps/template/header', $data);
+            $this->load->view('apps/template/nav_menu');
             $this->load->view('apps/'.$page);
-            $this->load->view('apps/footer');
+            $this->load->view('apps/template/footer');
         }
         else{
-            $this->load->view('apps/header');
+            $data['title'] = 'forbidden access';
+            $this->load->view('apps/template/header', $data);
+            $this->load->view('apps/template/nav_menu');
             $this->load->view('apps/notaccessed');
-            $this->load->view('apps/footer');
+            $this->load->view('apps/template/footer');
         }
 
     }
     
-    public function view($page = 'home2'){
-        $this->load->helper('url');
-        
-       $this->load->view('apps/header');
-        $this->load->view('apps/'.$page);
-        $this->load->view('apps/footer');
-    }
-    
-    public function logout(){
-        $this->load->helper(array('url', 'form'));
-        $this->load->library('session');
-        
-        $this->session->sess_destroy();              
-        
-        $this->load->view('apps/header');
-        $this->load->view('apps/login');
-        $this->load->view('apps/footer');
-    }
-    
-    public function is_logged_in(){
-         $this->load->library('session');
-        $is_login = $this->session->userdata('login');
-        //$username = $this->session->userdata('username');
-        if($is_login){
-            return true;
-        }
-    }
+//    public function view($page = 'home2'){
+//        $this->load->helper('url');
+//        
+//       $this->load->view('apps/header');
+//        $this->load->view('apps/'.$page);
+//        $this->load->view('apps/footer');
+//    }
+     
 }
