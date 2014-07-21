@@ -21,8 +21,33 @@ class Users_Model extends CI_Model{
         return $query->row();
     }
     
-    public function get_password_by_username($username){
-        $query = $this->db->get_where('users', array('username' => $username));
-        return $query->row();
+    public function get_user_by_username($username){
+//        $this->db->select('*');
+//        $this->db->from('users');
+//        $this->db->join('users_roles', 'users_roles.uid=users.uid');
+//        $this->db->join('role', 'role.rid=users_roles.rid');
+//        $this->db->where('users.username', $username);
+//        $query = $this->db->get();
+        $query = $this->db->query(
+                'SELECT * FROM users'
+                . ' JOIN users_roles ON users.uid=users_roles.uid'
+                . ' JOIN role ON users_roles.rid=role.rid'
+                . " Where users.username='".$username."'");
+        $result = $query->result_array();
+
+        $user = NULL;
+        if($result){
+            $user->uid = $result[0]['uid'];
+            $user->username = $result[0]['username'];
+            $user->password = $result[0]['password'];
+            $user->roles = array();
+            foreach($result as $data){
+                $user->roles[$data['rid']] = $data['name'];
+             }
+        }
+        
+        return $user;
     }
+    
+    
 }

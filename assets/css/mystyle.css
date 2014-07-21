@@ -183,10 +183,18 @@
     margin: 50px 10px 50px 10px;
 }
 
-#error_message{
+.error-message{
     color: red;
     font-weight: bold;
     font-size: 13px;
+}
+
+#success-message{
+    width: 1000px;
+    background:palegreen;
+    color: black;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 #footer
@@ -364,7 +372,8 @@ table {
  // End of table design
  
  // Form Style
- /* Basic Grey */
+ /* Basic Grey 
+  source: http://www.sanwebe.com/2013/10/css-html-form-styles */
 .basic-grey {
     margin-left:auto;
     margin-right:auto;
@@ -382,7 +391,7 @@ table {
     display: block;
     border-bottom:1px solid #E4E4E4;
     margin: -10px -15px 30px -10px;;
-    color: #888;
+    color: #444;
 }
 .basic-grey h1>span {
     display: block;
@@ -398,7 +407,7 @@ table {
     text-align: right;
     padding-right: 10px;
     margin-top: 10px;
-    color: #888;
+    color: #444;
 }
 .basic-grey input[type="text"], .basic-grey input[type="email"], .basic-grey textarea, .basic-grey select {
     border: 1px solid #DADADA;
@@ -447,3 +456,4 @@ table {
 .basic-grey .button:hover {
     background: #CF7A7A
 }
+// end of form design

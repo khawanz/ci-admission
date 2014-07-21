@@ -28,7 +28,8 @@ class Login extends CI_Controller {
         
         $this->session->sess_destroy();              
         
-        $this->load->view('apps/template/header');       
+        $data['title'] = 'Logout';
+        $this->load->view('apps/template/header',$data);       
         $this->load->view('apps/login');
         $this->load->view('apps/template/footer');
     }

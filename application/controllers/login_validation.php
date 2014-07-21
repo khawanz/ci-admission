@@ -17,8 +17,8 @@ class Login_Validation extends CI_Controller {
         $this->form_validation->set_rules('username', 'Username', 'required');
         $this->form_validation->set_rules('password', 'Password', 'callback_password_check');
        // $this->form_validation->set_message('required', 'Your custom message here');
-        $this->form_validation->set_error_delimiters('<div class="error">', '</div>');
-   
+        $this->form_validation->set_error_delimiters("<div class='error-message'>", "</div>");
+
         if ($this->form_validation->run() == FALSE)
         {
                 $data['title'] = 'Login';
@@ -30,33 +30,35 @@ class Login_Validation extends CI_Controller {
         }
         else
         {
-            $this->load->library('session');
-            
-            $user_session = array(
-                'session_id' => $this->session->userdata('session_id'),
-                'username' => $this->input->post('username'),
-                'login' => TRUE,
-            );
-            $this->session->set_userdata($user_session);
-       
-//            $this->load->view('apps/header');
-//            $this->load->view('apps/home');
-//            $this->load->view('apps/footer');
+            $this->load->helper(array('form', 'url'));                    
+                  
             redirect(base_url().'home');
         }
     }       
     
+    //validation for authentication user
     public function password_check($str){
         $username_input = $this->input->post('username');
-       $user = $this->users_model->get_password_by_username($username_input);
+        $user = $this->users_model->get_user_by_username($username_input);
        
+        //if username and password match, then it will set session
        if (!empty($user) && $str === $user->password)
-        {             
-                return TRUE;
+        {   
+            $this->load->library('session');
+            $user = $this->users_model->get_user_by_username($username_input);
+            
+            $user_session = array(
+                'session_id' => $this->session->userdata('session_id'),
+                'username' => $this->input->post('username'),
+                'uid' => $user->uid,
+                'roles' => $user->roles,
+                'login' => TRUE,
+            );
+            $this->session->set_userdata($user_session);
+            return TRUE;
         }
-
-        
-       $this->form_validation->set_message('password_check', "<div id = 'error_message'>Incorrect username or password!</div>");
+       
+       $this->form_validation->set_message('password_check', "<div class = 'error_message'>Incorrect username or password!</div>");
         return FALSE;     
     }
     
