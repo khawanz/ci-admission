@@ -1,7 +1,7 @@
 <link rel='stylesheet' media='all' type='text/css' href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' />
 <link rel='stylesheet' media='all' type='text/css' href='<?php echo base_url(); ?>/assets/css/jquery-ui-timepicker-addon.css' />
 <div id='breadcrumb'>
-    <a href='#'>schedule</a> » add-schedule
+    <a href='#'>schedule</a> » edit-schedule
 </div>     
 <div class='menu-schedule'>
     <a href='<?php echo base_url(); ?>schedule'><div class='menu-list'>List</div></a>
@@ -21,74 +21,109 @@
                         
                         <?php 
                         $attributes = array('class' => 'basic-grey');
-                        echo form_open('schedule/create',$attributes) ?>
-                        <h1>Add Schedule
-                            <span>Please fill all the texts in the fields.</span>
+                        echo form_open('schedule/update',$attributes) ?>
+                        <h1>Edit Schedule
+                            
                         </h1>
+                        <label>
+                            <input type='hidden' name="id" value="<?php echo $schedule['sc_id'];?>"/>
+                        </label> 
                         <label>
                             <span>Gelombang :</span>
                             <select name="gelombang">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
+                                <?php
+                                for($i=1; $i<=3; $i++){
+                                    if($schedule['sc_gelombang'] == $i){
+                                        echo "<option selected>$i</option>";
+                                    }
+                                    else{
+                                        echo "<option>$i</option>";
+                                    }
+                                        
+                                }
+                                ?>
+                                
                             </select>
                             <!--<input id='name' type='text' name='name' placeholder='Your Full Name' />-->
                         </label>
                             
+                        <?php
+                            $tanggal = date('m/d/y', strtotime($schedule['sc_date']));
+                        ?>
                           <!--http://jquerytools.org/documentation/dateinput/-->                        
                         <label>
                             <span>Tanggal Test :</span>
-                            <input type='date' name="tanggal"/>
+                            <input type='date' name="tanggal" value="<?php echo $tanggal;?>"/>
                         </label>                  
                         
                         <!--http://runnable.com/UgCgGBRfEwILAAEt/how-to-create-date-time-picker-using-jquery-ui-->
                         <label>
                             <span>Jam Mulai :</span>
-                            <input type='text' value='' class='time' name='time1' />
+                            <input type='text' class='time' name='time1' value="<?php echo $schedule['sc_starttime'];?>"/>
                         </label> 
                         <label>
                             <span>Jam Selesai :</span>
-                            <input type='text' value='' class='time' name='time2' />
+                            <input type='text'  class='time' name='time2' value="<?php echo $schedule['sc_endtime'];?>"/>
                         </label> 
 
                         <label>
                             <span>Tempat Test :</span>
-                            <input type='text' name="tempat"/>
+                            <input type='text' name="tempat" value="<?php echo $schedule['sc_place'];?>"/>
                         </label> 
                         <label>
                             <span>Alamat :</span>
-                            <textarea id='message' name='alamat' placeholder='Test Address'></textarea>
+                            <textarea id='alamat' name='alamat' placeholder='Test Address' value="<?php echo $schedule['sc_address'];?>"></textarea>
                         </label>
                         <label>
                             <span>Kota :</span>
-                            <input type='text' name="kota"/>
+                            <input type='text' name="kota" value="<?php echo $schedule['sc_city'];?>"/>
                         </label> 
                        
                         <label>
                             <span>Kapasitas :</span>
-                            <input type='text' name="kapasitas"/>
+                            <input type='text' name="kapasitas" value="<?php echo $schedule['sc_capacity'];?>"/>
                         </label>
+                        
+                        <?php
+                            $tanggal_dok = date('m/d/y', strtotime($schedule['sc_doc_deadline']));
+                        ?>
                         <label>
                             <span>Penyerahan Dokumen :</span>
-                            <input type='date' name="dokumen"/>
+                            <input type='date' name="dokumen" value="<?php echo $tanggal_dok;?>"/>
                         </label>
+                        
+                        <?php
+                            $tanggal_konfirmasi = date('m/d/y', strtotime($schedule['sc_pay_deadline']));
+                        ?>
                         <label>
                             <span>Konfirmasi USM :</span>
-                            <input type='date' name="konfirmasi"/>
+                            <input type='date' name="konfirmasi" value="<?php echo $tanggal_konfirmasi;?>"/>
                         </label>
                         
                          <label>
                             <span>Status :</span>
                             <select name="status">
-                                <option>Open</option>
-                                <option>Closed</option>                                
+                                <?php
+                                    if($schedule['sc_status']){
+                                        echo "<option selected value=1>Open</option>";
+                                        echo "<option value=0>Closed</option>";
+                                    }
+                                    else{                                        
+                                        echo "<option value=1>Open</option>";
+                                        echo "<option selected value=0>Closed</option>";
+                                    
+                                    }
+                                ?>
+                             
                             </select>
                             
                         </label>
                         
                          <label>
                             <span>&nbsp;</span>
-                            <input type='submit' class='button' value='Submit' />
+                            <button type='submit' name='updateForm' class='button' value='updateButton' >Update</button>   
+                            <button type='submit' name='updateForm' class='button' value='cancelButton' >Cancel</button>   
+                            
                         </label> 
                         <script>
                             $(':date').dateinput();

@@ -42,7 +42,7 @@ class Login_Validation extends CI_Controller {
         $user = $this->users_model->get_user_by_username($username_input);
        
         //if username and password match, then it will set session
-       if (!empty($user) && $str === $user->password)
+       if (!empty($user) && md5($str) === $user->password)
         {   
             $this->load->library('session');
             $user = $this->users_model->get_user_by_username($username_input);

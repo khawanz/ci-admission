@@ -1,9 +1,9 @@
 <div id="breadcrumb">
-    <a href="#">schedule</a>
+    <a href="#">user</a>
 </div>     
 <div class="menu-schedule">
     <a href="#"><div class="menu-list">List</div></a>
-    <a href="<?php echo base_url(); ?>schedule/add"><div class="menu-list">Add</div></a>
+    <a href="<?php echo base_url(); ?>users/add"><div class="menu-list">Add</div></a>
 </div>
 <div id="success-message"> 
     <!--here for success message after creating new schedule-->
@@ -18,7 +18,7 @@
                             </ul>
                     </div>-->
                     <div id="content">
-                        <h2>Jadwal Ujian</h2>
+                        <h2>Daftar User</h2>
                            <table class="bordered">
                             <thead>
 

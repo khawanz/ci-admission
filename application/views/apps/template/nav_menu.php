@@ -1,7 +1,7 @@
 <div class ="navigation" id="navigation-left">
                     <ul>
                             <li><a href="<?php echo base_url();?>schedule">Schedule</a></li>
-                            <li><a href="#">Users</a></li>
+                            <li><a href="<?php echo base_url();?>users">Users</a></li>
                             <li><a href="#">My Account</a></li>
                             <li><a href="#">Pembayaran</a></li>                            
                     </ul>         

@@ -18,8 +18,7 @@ class Home extends CI_Controller {
         }
         else{
             $data['title'] = 'forbidden access';
-            $this->load->view('apps/template/header', $data);
-            $this->load->view('apps/template/nav_menu');
+            $this->load->view('apps/template/header', $data);          
             $this->load->view('apps/notaccessed');
             $this->load->view('apps/template/footer');
         }

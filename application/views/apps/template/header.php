@@ -20,23 +20,7 @@
     <span id="header-title"> Admission </span>
 
 </div>
-    
-    <?php if($this->session->flashdata('flashSuccess')):?>
-<p class='flashMsg flashSuccess'> <?php $this->session->flashdata('flashSuccess')?> </p>
-<?php endif?>
- 
-<?php if($this->session->flashdata('flashError')):?>
-<p class='flashMsg flashError'> <?php $this->session->flashdata('flashError')?> </p>
-<?php endif?>
- 
-<?php if($this->session->flashdata('flashInfo')):?>
-<p class='flashMsg flashInfo'> <?php $this->session->flashdata('flashInfo')?> </p>
-<?php endif?>
- 
-<?php if($this->session->flashdata('flashWarning')):?>
-<p class='flashMsg flashWarning'> <?php $this->session->flashdata('flashWarning')?> </p>
-<?php endif;
-    
+   
  
 
  
