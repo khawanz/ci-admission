@@ -23,35 +23,24 @@
                             <thead>
 
                             <tr>
-                                <th>NO</th>        
-                                <th>GEL</th>
-                                <th>TGL USM</th>
-                                <th>JAM</th>
-                                <th>TEMPAT</th>
-                                <th>KOTA</th>
-                                <th>KT/DF</th>
-                                <th>FEE</th>
-                                <th>STATUS</th>
+                                <th>No.</th>        
+                                <th>Username</th>
+                                <th>Status</th>
+                                <th>Role</th>
                                 <th>-</th>
-                                <th>-</th>
+                                <th>-</th>                             
                             </tr>
                             </thead>
                             <?php 
                              $no = 1;
-                             foreach($schedule as $sc){
-                                 $tanggal = date('d M Y', strtotime($sc['sc_date']));
+                             foreach($users as $user){                                
                                  echo "<tr>
                                         <td>$no</td>        
-                                        <td>$sc[sc_gelombang]</td>
-                                        <td>$tanggal</td>
-                                        <td>$sc[sc_starttime] s/d $sc[sc_endtime]</td>
-                                        <td>$sc[sc_place]</td>  
-                                        <td>$sc[sc_city]</td>  
-                                        <td>$sc[sc_capacity]</td>  
-                                        <td>$sc[sc_capacity]</td>  
-                                        <td>$sc[sc_status]</td>  
-                                        <td><a href=".base_url()."schedule/edit/".$sc['sc_id'].">edit</a></td>"; ?>                                         
-                                 <td><a href="<?php echo base_url().'schedule/delete/'.$sc['sc_id']; ?>" onclick='return confirm("Are you sure?");'>delete</a></td>  
+                                        <td>$user[username]</td>  
+                                        <td>$user[status]</td> 
+                                        <td>$user[roles]</td> 
+                                        <td><a href=".base_url()."users/edit/>edit</a></td>"; ?>                                         
+                                 <td><a href="<?php echo base_url().'users/delete/'; ?>" onclick='return confirm("Are you sure?");'>delete</a></td>  
                                      <?php "</tr>  ";
                                 
                              

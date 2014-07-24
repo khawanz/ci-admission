@@ -12,7 +12,28 @@ class Users extends CI_Controller {
         $this->load->library('session');
 
         if(is_logged_in()){
-            $data['title'] = 'User List';
+            $users = $this->users_model->get_users();
+            $data['title'] = 'User List';           
+            
+            $user_list = array();
+            $i = 0;
+            foreach($users as $user){
+                $user_list[$i]['username'] = $user['username'];
+                $user_list[$i]['status'] = ($user['status'])? 'Aktif':'Tidak Aktif';
+                
+                $userload = $this->users_model->get_user_by_username($user['username']);
+                if(count($userload->roles)){
+                    $roles = '';
+                    foreach($userload->roles as $us){
+                        $roles .= '- '.$us;
+                        $roles .= '<br/>';
+                    }
+                }
+                $user_list[$i]['roles'] = $roles;       
+                $i++;
+            }
+            
+            $data['users'] = $user_list;
             $this->load->view('apps/template/header', $data);
             $this->load->view('apps/template/nav_menu');
             $this->load->view('apps/list_user');

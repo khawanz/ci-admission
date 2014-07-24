@@ -11,11 +11,6 @@ class Users_Model extends CI_Model{
         return $query->result_array();
     }
     
-    public function get_roles(){
-        $query = $this->db->get('role');
-        return $query->result_array();
-    }
-    
     public function get_user_by_roleid($rid){
         $this->db->select('*');
         $this->db->from('users');
@@ -48,9 +43,9 @@ class Users_Model extends CI_Model{
             $user->password = $result[0]['password'];
             $user->roles = array();
             foreach($result as $data){
-                if(isset($data['rid']) && isset($data['name'])){
-                    $user->roles[$data['rid']] = $data['name'];
-                }
+//                if(!empty($data['rid']) && !empty($data['name'])){
+                    $user->roles[$data['rid']] = $data['role_name'];
+//                }
                 
              }
         }
@@ -142,5 +137,10 @@ class Users_Model extends CI_Model{
     
     public function update_users_roles($uid, $rid){
         return $this->db->insert('users_roles', array('rid' => $rid, 'uid' => $uid));
+    }
+    
+    public function get_roles(){
+        $query = $this->db->get('role');
+        return $query->result_array();
     }
 }
