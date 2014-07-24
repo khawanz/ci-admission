@@ -12,7 +12,7 @@ class Users extends CI_Controller {
         $this->load->library('session');
 
         if(is_logged_in()){
-            $data['title'] = 'List User';
+            $data['title'] = 'User List';
             $this->load->view('apps/template/header', $data);
             $this->load->view('apps/template/nav_menu');
             $this->load->view('apps/list_user');
@@ -49,16 +49,15 @@ class Users extends CI_Controller {
         }
     }
     
-    public function step1(){
+    public function step1($next_step = FALSE){
+        
         $this->load->helper(array('form', 'url','admission_helper'));       
         $this->load->library(array('form_validation', 'session'));
 
-        $x = 1;
-
         $this->form_validation->set_rules('username', 'Username', 'trim|required|min_length[5]|max_length[12]|xss_clean');
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
-        $this->form_validation->set_rules('password', 'Password', 'trim|required|matches[passconf]|md5');
-        $this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required|md5');       
+        $this->form_validation->set_rules('password', 'Password', 'trim|required|matches[passconf]');
+        $this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required');       
         $this->form_validation->set_rules('roles', 'Role', 'required');
         $this->form_validation->set_error_delimiters("<div class='error-message'>", "</div>");
         
@@ -69,24 +68,31 @@ class Users extends CI_Controller {
 	}
 	else
 	{
-            $roles = $this->input->post('roles');
-            $next_step = FALSE;
-            foreach($roles as $role){
-                if($role == 'matriculant'){
-                    $next_step = TRUE;
+            if(isset($next_step)){
+                $roles = $this->input->post('roles');
+                $next_step = FALSE;
+                foreach($roles as $role){
+                    if($role == 'matriculant'){
+                        $next_step = TRUE;
+                    }
                 }
             }
-            $this->load->library('form_validation');
+                     
+            //it will take to next step if created user has matriculant role
             if(is_logged_in() && $next_step){
-                $data['title'] = 'Add User';
+                $data['title'] = 'create user';
 
-                $roles = $this->users_model->get_roles();
-                $data['roles'] = $roles;
+                $data['username'] = $this->input->post('username');
+                $data['email'] = $this->input->post('email');
+                $data['password'] = $this->input->post('password');
+                $data['roles'] = $this->input->post('roles');
+                
                 $this->load->view('apps/template/header', $data);
                 $this->load->view('apps/template/nav_menu');
                 $this->load->view('apps/add_user_2',$data);
                 $this->load->view('apps/template/footer');
             }
+            //if created user has no matriculant role, then create it.
             else if(is_logged_in() && !$next_step){
                  $this->create($next_step);
             }
@@ -96,30 +102,41 @@ class Users extends CI_Controller {
                 $this->load->view('apps/notaccessed');
                 $this->load->view('apps/template/footer');
             }
-	}   
-        
-        
+	}                  
     }
     
-    public function create($next_step){       
+    public function step2(){
         $this->load->helper('form');
 	$this->load->library('form_validation');     
 	     
-	
         $this->load->library('session');
-        $this->users_model->create_user($next_step);
-
-        $username = $this->input->post('username');
-        $user = $this->users_model->get_user_by_username('khawanz');
-
-        $roles = $this->input->post('roles');
-        foreach($roles as $rid => $role_name){
-            $this->users_model->update_users_roles($user->uid, $rid);
+        $this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('hp', 'HP', 'trim|required');
+        $this->form_validation->set_rules('nama_wali', 'Nama Orangtua/Wali', 'trim|required');
+        $this->form_validation->set_rules('penghasilan_wali', 'Penghasilan Orangtua/Wali', 'trim|required');       
+        $this->form_validation->set_rules('sekolah_asal', 'Sekolah Asal', 'required');
+        $this->form_validation->set_error_delimiters("<div class='error-message'>", "</div>");
+        
+        //back to step 1 form if no valid
+        if ($this->form_validation->run() === FALSE)
+	{
+            $this->step1(TRUE);
+	}
+	else
+	{
+            $this->create(TRUE);
         }
+    }
+    
+    public function create($next_step = FALSE){       
+        $this->load->helper(array('form','url'));
+	$this->load->library('form_validation');     	     
+                
+        $this->users_model->create_user($next_step);                  
 
         $this->session->set_flashdata('success', 'SUCCESS creating new user!');
 
-        redirect('users');
+        redirect('users');      
   
     }
 }

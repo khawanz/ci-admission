@@ -27,17 +27,17 @@ class Users_Model extends CI_Model{
     }
     
     public function get_user_by_username($username){
-        $this->db->select('*');
-        $this->db->from('users');
-        $this->db->join('users_roles', 'users_roles.uid=users.uid');
-        $this->db->join('role', 'role.rid=users_roles.rid');
-        $this->db->where('users.username', $username);
-        $query = $this->db->get();
-//        $query = $this->db->query(
-//                'SELECT * FROM users'
-//                . ' JOIN users_roles ON users.uid=users_roles.uid'
-//                . ' JOIN role ON users_roles.rid=role.rid'
-//                . " Where users.username='".$username."'");
+//        $this->db->select('*');
+//        $this->db->from('users');
+//        $this->db->join('users_roles', 'users_roles.uid=users.uid');
+//        $this->db->join('role', 'role.rid=users_roles.rid');
+//        $this->db->where('users.username', $username);
+//        $query = $this->db->get();
+        $query = $this->db->query(
+                'SELECT u.uid,username,password,email,created,r.rid,name as role_name FROM users u'
+                . ' LEFT JOIN users_roles ur ON u.uid=ur.uid'
+                . ' LEFT JOIN role r ON ur.rid=r.rid'
+                . " Where u.username='".$username."'");
         $result = $query->result_array();
 
         $user = NULL;
@@ -48,66 +48,96 @@ class Users_Model extends CI_Model{
             $user->password = $result[0]['password'];
             $user->roles = array();
             foreach($result as $data){
-                $user->roles[$data['rid']] = $data['name'];
+                if(isset($data['rid']) && isset($data['name'])){
+                    $user->roles[$data['rid']] = $data['name'];
+                }
+                
              }
         }
         
         return $user;
     }
     
-    public function create_user(){
+    //@step2 : TRUE if created user has 'matriculant' role
+    public function create_user($step2 = FALSE){
         $this->load->library('session');
         
-        //$user_id = $this->session->userdata('uid');   
+        $user_id = (int)$this->session->userdata('uid');   
         $username = $this->input->post('username');
+        $roles = $this->input->post('roles');
 
+        
         $data_user = array(
-		'username' => $username,
-		'password' => $this->input->post('password'),
-                'email' => $this->input->post('email'),
-		'created' => strtotime('now'),
+            'username' => $username,
+            'password' => md5($this->input->post('password')),
+            'email' => $this->input->post('email'),
+            'created' => strtotime('now'),
         );
         $this->db->insert('users', $data_user);
-              
+        $user = $this->get_user_by_username($username);
+
+        //update users_roles -> user get roles and it should be save in db
+        foreach($roles as $rid => $role_name){
+            $this->update_users_roles($user->uid, $rid);
+        }       
+               
+        if($step2){        
+            $data_sekolah = array(
+		'uid' => (int)$user->uid,
+		'ds_asal' => $this->input->post('sekolah_asal'),
+		'ds_jurusan' => $this->input->post('jurusan'),
+                'ds_tahunlulus' => $this->input->post('tahun_lulus'),
+                'ds_alamat' => $this->input->post('alamat_sekolah'),
+                'ds_kota' => $this->input->post('kota_sekolah'),
+                'ds_kodepos' => $this->input->post('kodepos_sekolah'),  
+                'changed_by' => $user_id,
+                'changed' => strtotime('now'),
+            );
+            $this->db->insert('data_school', $data_sekolah);
+            
+            $wali1 = $this->input->post('status_wali1');
+            $wali2 = $this->input->post('status_wali2');
+            $data_orangtua = array(
+                'uid' => (int)$user->uid,
+                'do_status' => empty($wali2)? $wali1:$wali1,
+                'do_name' => $this->input->post('nama_wali'),
+                'do_education' => $this->input->post('pendidikan_wali'),
+                'do_job' => $this->input->post('pekerjaan_wali'),
+                'do_position' => $this->input->post('jabatan_wali'),
+                'do_email' => $this->input->post('email_wali'),
+                'do_office_telp' => $this->input->post('telp_kantor_wali'),
+                'do_house_telp' => $this->input->post('telp_rumah_wali'),
+                'do_hp' => $this->input->post('hp_wali'),
+                'do_address' => $this->input->post('alamat_wali'),
+                'do_city' => $this->input->post('kota_wali'),
+                'do_zipcode' => $this->input->post('kodepos_wali'),
+                'do_salary' => $this->input->post('penghasilan_wali'),            
+                'changed_by' => $user_id,
+                'changed' => strtotime('now'),  
+            );
+            $this->db->insert('data_parent', $data_orangtua);
+            
+            //date in mysql shold be 'y-m-d' eg.2014-12-31
+            $birthdate = $this->input->post('tahun_lahir').'-'.$this->input->post('bulan_lahir').'-'.$this->input->post('tanggal_lahir');
+            $data_pribadi = array(
+                'uid' => (int)$user->uid,              
+                'dp_name' => $this->input->post('nama'),
+                'dp_nick' => $this->input->post('panggilan'),
+                'dp_birthplace' => $this->input->post('tempat_lahir'),
+                'dp_birthdate' => $birthdate,
+                'dp_religion' => $this->input->post('agama'),
+                'dp_sex' => $this->input->post('sex'),
+                'dp_status' => $this->input->post('status'),
+                'dp_blood' => '-',
+                'dp_telp' => '-',
+                'dp_hp' => $this->input->post('hp'),                      
+                'changed_by' => $user_id,
+                'changed' => strtotime('now'),  
+            );
+            $this->db->insert('data_personal', $data_pribadi);
+        }
+	
         
-//        
-//	$data_sekolah = array(
-//		'sc_gelombang' => $this->input->post('gelombang'),
-//		'sc_date' => $tanggal,
-//		'sc_starttime' => $this->input->post('time1'),
-//                'sc_endtime' => $this->input->post('time2'),
-//                'sc_place' => $this->input->post('tempat'),
-//                'sc_address' => $this->input->post('alamat'),
-//                'sc_city' => $this->input->post('kota'),
-//                'sc_capacity' => $this->input->post('kapasitas'),
-//                'sc_doc_deadline' => $this->input->post('dokumen'),
-//                'sc_pay_deadline' => $this->input->post('konfirmasi'),
-//                'sc_status' => $this->input->post('status'),
-//                'added_by' => $user_id,               
-//                'updated_by' => $user_id,
-//                'created' => strtotime('now'),
-//                'changed' => strtotime('now'),
-//	);
-//	$this->db->insert('users', $data_sekolah);
-//        
-//        $data_orangtua = array(
-//		'sc_gelombang' => $this->input->post('gelombang'),
-//		'sc_date' => $tanggal,
-//		'sc_starttime' => $this->input->post('time1'),
-//                'sc_endtime' => $this->input->post('time2'),
-//                'sc_place' => $this->input->post('tempat'),
-//                'sc_address' => $this->input->post('alamat'),
-//                'sc_city' => $this->input->post('kota'),
-//                'sc_capacity' => $this->input->post('kapasitas'),
-//                'sc_doc_deadline' => $this->input->post('dokumen'),
-//                'sc_pay_deadline' => $this->input->post('konfirmasi'),
-//                'sc_status' => $this->input->post('status'),
-//                'added_by' => $user_id,               
-//                'updated_by' => $user_id,
-//                'created' => strtotime('now'),
-//                'changed' => strtotime('now'),
-//	);
-//	$this->db->insert('users', $data_orangtua);
     }
     
     public function update_users_roles($uid, $rid){

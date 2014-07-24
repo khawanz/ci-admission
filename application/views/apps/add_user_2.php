@@ -21,9 +21,27 @@
                         
                         <?php 
                         $attributes = array('class' => 'register');
-                        echo form_open('user/create',$attributes) ?>
-
-                            <h1>Add User</h1>
+                        echo form_open('users/step2',$attributes) ?>
+                            <!--HIDDEN VALUE from previous step-->
+                            <input type="hidden" name="username" value="<?php echo $username ?>"/>
+                            <input type="hidden" name="email" value="<?php echo $email ?>"/>
+                            <input type="hidden" name="password" value="<?php echo $password ?>"/>
+                            <div style="display: none">
+                            <?php 
+                                foreach($roles as $rid => $role):?>
+                                   <p class="role">
+                                    <?php
+                                        echo form_checkbox("roles[$rid]",$role, set_checkbox('roles', $role),TRUE); 
+                                        echo $role;
+                                        ?>
+                                   </p>
+                           <?php
+                                endforeach;
+                            ?>
+                           </div>
+                            <!--END OF HIDDEN VALUE-->
+                            
+                            <h1>Complete Further Information</h1>
                             
                             <fieldset class="row2">
                                 <legend>Data Pribadi
@@ -31,12 +49,12 @@
                                 <p>
                                     <label>Nama *
                                     </label>
-                                    <input type="text" class="long"/>
+                                    <input type="text" class="long" name="nama"/>
                                 </p>
                                 <p>
                                     <label>Panggilan 
                                     </label>
-                                    <input type="text" class="long"/>
+                                    <input type="text" class="long" name="panggilan"/>
                                 </p>
                                 <p>
                                     <label>Jenis Kelamin *</label>
@@ -48,12 +66,12 @@
                                 <p>
                                     <label>Tempat Lahir 
                                     </label>
-                                    <input type="text" class="long"/>
+                                    <input type="text" class="long" name="tempat_lahir"/>
                                 </p>
                                 <p>
                                     <label>Tanggal Lahir *
                                     </label>
-                                    <select class="birthdate">
+                                    <select class="birthdate" name="tanggal_lahir">
                                         <option value="1">01
                                         </option>
                                         <option value="2">02
@@ -117,7 +135,7 @@
                                         <option value="31">31
                                         </option>
                                     </select>
-                                    <select>
+                                    <select name="bulan_lahir">
                                         <option value="1">January
                                         </option>
                                         <option value="2">February
@@ -143,13 +161,13 @@
                                         <option value="12">December
                                         </option>
                                     </select>
-                                    <input class="year" type="text" size="4" maxlength="4"/>e.g 1976
+                                    <input class="year" type="text" size="4" maxlength="4" name="tahun_lahir"/>e.g 1976
                                 </p>
                                 
                                 <p>
                                     <label>Status
                                     </label>
-                                    <select>
+                                    <select name="status">
                                         <option value="1">Belum Menikah
                                         </option>
                                         <option value="2">Menikah
@@ -159,7 +177,7 @@
                                 <p>
                                     <label>Agama
                                     </label>
-                                    <select>
+                                    <select name="agama">
                                         <option value="1">Islam
                                         </option>
                                         <option value="2">Kristen
@@ -173,11 +191,11 @@
                                         <option value="6">Lainnya
                                         </option>
                                     </select>
-                                </p>
-                                <p>
-                                    <label>Phone *
+                                </p>                                
+                                 <p>
+                                    <label>HP *
                                     </label>
-                                    <input type="text" maxlength="10"/>
+                                    <input type="text" maxlength="10" name="hp"/>
                                 </p>
                             </fieldset>
                             
@@ -187,45 +205,49 @@
                                 <p>
                                     <label>Sekolah Asal*
                                     </label>
-                                    <input type="text" class="long"/>
+                                    <input type="text"  name="sekolah_asal"/>e.g. SMU N 35
                                 </p>
                                 <p>
                                     <label>Jurusan
                                     </label>
-                                    <select class="jurusan">
-                                        <option value="1">IPA
+                                    <select class="jurusan" name="jurusan">
+                                        <option value="ipa">IPA
                                         </option>
-                                        <option value="2">IPS
+                                        <option value="ips">IPS
                                         </option>
-                                        <option value="2">Bahasa
+                                        <option value="bahasa">Bahasa
                                         </option>
                                     </select>
                                     
                                     <label>Tahun Lulus
                                     </label>
-                                    <select class="tahun-lulus">
-                                        <option value="1">2012
+                                    <select class="tahun-lulus" name="tahun_lulus">
+                                        <option value="2014">2014
                                         </option>
-                                        <option value="2">2011
+                                        <option value="2013">2013
                                         </option>
-                                        <option value="2">2010
+                                        <option value="2012">2012
+                                        </option>
+                                        <option value="2011">2011
+                                        </option>
+                                        <option value="2010">2010
                                         </option>
                                     </select>
                                 </p>
                                 <p>
                                     <label>Alamat *
                                     </label>
-                                    <textarea cols="30" rows="3"></textarea>
+                                    <textarea cols="30" rows="3" name="alamat_sekolah"></textarea>
                                 </p>
                                 <p>
                                     <label>Kota
                                     </label>
-                                    <input type="text" maxlength="10"/>
+                                    <input type="text" name="kota_sekolah"/>
                                 </p>
                                 <p>
                                     <label>Kode Pos
                                     </label>
-                                    <input class="year" type="text" size="8"/>
+                                    <input class="year" type="text" size="8" name="kodepos_sekolah"/>
                                 </p>
                                 
                             </fieldset>
@@ -234,22 +256,23 @@
                                 <legend>Data Orang Tua/Wali
                                 </legend>
                                 <p>
-                                    <label>Orang Tua</label>
-                                     <select class="tahun-lulus">
-                                        <option value="1">Ayah
+                                    <label>Orang Tua/Wali</label>
+                                    <select class="tahun-lulus" name="status_wali1">
+                                        <option value="ayah">Ayah
                                         </option>
-                                        <option value="2">Ibu
+                                        <option value="ibu">Ibu
                                         </option>
                                      </select>
+                                    <input type="text" name="status_wali2" placeholder="Lainnya sebutkan"/>
                                 </p>
                                 <p>
-                                    <label>Nama
+                                    <label>Nama *
                                     </label>
-                                    <input type="text" maxlength="10"/>
+                                    <input type="text" maxlength="10" name="nama_wali"/>
                                 </p>
                                  <p>
                                     <label>Pendidikan</label>
-                                     <select class="tahun-lulus">
+                                    <select class="tahun-lulus" name="pendidikan_wali">
                                         <option value="1">S3
                                         </option>
                                         <option value="2">S2
@@ -267,51 +290,51 @@
                                 <p>
                                     <label>Pekerjaan
                                     </label>
-                                    <input type="text" maxlength="10"/>
+                                    <input type="text" maxlength="10" name="pekerjaan_wali"/>
                                 </p>
                                 <p>
                                     <label>Jabatan
                                     </label>
-                                    <input type="text" maxlength="10"/>
+                                    <input type="text" maxlength="10" name="jabatan_wali"/>
                                 </p>
                                 <p>
                                     <label>Telepon Kantor
                                     </label>
-                                    <input type="text" maxlength="10"/>
+                                    <input type="text" maxlength="10" name="telp_kantor_wali"/>
                                 </p>
                                 <p>
                                     <label>Telepon Rumah
                                     </label>
-                                    <input type="text" maxlength="10"/>
+                                    <input type="text" maxlength="10" name="telp_rumah_wali"/>
                                 </p>
                                 <p>
                                     <label>HP
                                     </label>
-                                    <input type="text" maxlength="10"/>
+                                    <input type="text" maxlength="10" name="hp_wali"/>
                                 </p>
                                 <p>
                                     <label>Email
                                     </label>
-                                    <input type="text" maxlength="10"/>
+                                    <input type="text" maxlength="10" name="email_wali"/>
                                 </p>
                                  <p>
                                     <label>Alamat *
                                     </label>
-                                    <textarea cols="30" rows="3"></textarea>
+                                     <textarea cols="30" rows="3" name="alamat_wali"></textarea>
                                 </p>
                                 <p>
                                     <label>Kota
                                     </label>
-                                    <input type="text" maxlength="10"/>
+                                    <input type="text" name="kota_wali"/>
                                 </p>
                                  <p>
                                     <label>Kode Pos
                                     </label>
-                                    <input class="year" type="text" size="8"/>
+                                     <input class="year" type="text" size="8" name="kodepos_wali"/>
                                 </p>
                                 <p>
-                                    <label>Penghasilan Orang Tua</label>
-                                     <select>
+                                    <label>Penghasilan Orang Tua *</label>
+                                    <select name="penghasilan_wali">
                                         <option selected="selected" value="1">0 - 999.999</option>
                                         <option value="3">1.000.000 - 2.999.999</option>
                                         <option value="5">3.000.000 - 4.999.999</option>
