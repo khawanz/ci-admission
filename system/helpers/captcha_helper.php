@@ -197,7 +197,7 @@ if ( ! function_exists('create_captcha'))
 		else
 		{
 			$font_size	= 26;
-			$x = 20;
+			$x = 50;
 			$y = $font_size+2;
 		}
 
