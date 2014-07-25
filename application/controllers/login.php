@@ -22,8 +22,8 @@ class Login extends CI_Controller {
             'img_url'    => base_url().'captcha/',
             'font' => './system/fonts/impact.ttf',          
             'img_width'  => '100',
-            'img_height' => 30,
-            'expiration' => 7200,
+            'img_height' => 50,
+            'expiration' => 180,
             "time" => time()
            );
 
@@ -46,8 +46,14 @@ class Login extends CI_Controller {
         $this->form_validation->set_rules('password', 'Password', 'callback_password_check');
        // $this->form_validation->set_message('required', 'Your custom message here');
         $this->form_validation->set_error_delimiters("<div class='error-message'>", "</div>");
-
-        if ($this->form_validation->run() == FALSE)
+        $this->form_validation->set_rules('captcha', 'captcha', 'required');
+        $x = $this->input->post('captcha');
+        if($this->form_validation->run() == TRUE 
+                && $this->input->post('captcha') == $cap['word'])
+        {                               
+            redirect(base_url().'home');
+        } 
+        else
         {
                 $data['title'] = 'Login';
                 $this->load->view('apps/template/header', $data);               
@@ -55,10 +61,6 @@ class Login extends CI_Controller {
                 $this->load->view('apps/template/footer');
                
         }
-        else
-        {                               
-            redirect(base_url().'home');
-        }      
         
     }
        
@@ -68,10 +70,7 @@ class Login extends CI_Controller {
         
         $this->session->sess_destroy();              
         
-        $data['title'] = 'Logout';
-        $this->load->view('apps/template/header',$data);       
-        $this->load->view('apps/login');
-        $this->load->view('apps/template/footer');
+        redirect('login');
     }
     
     //validation for authentication user

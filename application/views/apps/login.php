@@ -26,9 +26,12 @@ and open the template in the editor.
                         <?php echo form_open('login') ?>
                             
                         <label>Username</label>:<input type="text" name="username" size="15"><br/>
-                        <label>Password</label>:<input type="password" name="password" size="15"><br/>
-                        <?php    echo 'Submit the word you see below:';?> <br/>
-                        <div id="captcha"> <?php    echo $cap['image'];?><br/> </div>
+                        <label>Password</label>:<input type="password" name="password" size="15"><br/>                      
+                        <div id="captcha"> 
+                            <?php    echo $cap['image'];?><br/> 
+                            What code is in the image?
+                            <input type="text" name="captcha" size="10">
+                        </div>
                         <?php echo form_submit('submit', 'Login!');?>
 
                      <?php echo form_close();?>
