@@ -165,6 +165,10 @@
     margin: 5px 5px 5px 5px;
 }
 
+#captcha{
+    font-size: 20px;
+}
+
 #content h2 { margin: 0; }
 
 #aside

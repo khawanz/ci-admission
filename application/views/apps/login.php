@@ -23,12 +23,15 @@ and open the template in the editor.
                     <div id="login-form">
                         <?php echo validation_errors(); ?>
 
-                        <?php echo form_open('login_validation') ?>
+                        <?php echo form_open('login') ?>
                             
                         <label>Username</label>:<input type="text" name="username" size="15"><br/>
                         <label>Password</label>:<input type="password" name="password" size="15"><br/>
-                            <input type="submit" value="Login">
-                        </form>
+                        <?php    echo 'Submit the word you see below:';?> <br/>
+                        <div id="captcha"> <?php    echo $cap['image'];?><br/> </div>
+                        <?php echo form_submit('submit', 'Login!');?>
+
+                     <?php echo form_close();?>
                              
                     </div>
                     <div id="aside">
