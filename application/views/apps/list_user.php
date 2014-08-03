@@ -1,7 +1,7 @@
 <div id="breadcrumb">
     <a href="#">user</a>
 </div>     
-<div class="menu-schedule">
+<div class="menu-div">
     <a href="#"><div class="menu-list">List</div></a>
     <a href="<?php echo base_url(); ?>users/add"><div class="menu-list">Add</div></a>
 </div>
