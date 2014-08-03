@@ -46,12 +46,15 @@ class Login extends CI_Controller {
         $this->form_validation->set_rules('password', 'Password', 'callback_password_check');
        // $this->form_validation->set_message('required', 'Your custom message here');
         $this->form_validation->set_error_delimiters("<div class='error-message'>", "</div>");
-        $this->form_validation->set_rules('captcha', 'captcha', 'required');
-        $x = $this->input->post('captcha');
-        if($this->form_validation->run() == TRUE 
-                && $this->input->post('captcha') == $cap['word'])
-        {                               
+        $this->form_validation->set_rules('captcha', 'captcha', 'callback_captcha_check['.$cap['word'].']');
+        $captcha_input = $this->input->post('captcha');
+        if($this->form_validation->run() == TRUE)
+        {   
+            
+            $this->set_session();
             redirect(base_url().'home');
+ 
+            
         } 
         else
         {
@@ -70,7 +73,7 @@ class Login extends CI_Controller {
         
         $this->session->sess_destroy();              
         
-        redirect('login');
+        redirect(base_url().'login');
     }
     
     //validation for authentication user
@@ -80,18 +83,7 @@ class Login extends CI_Controller {
        
         //if username and password match, then it will set session
        if (!empty($user) && md5($str) === $user->password)
-        {   
-            $this->load->library('session');
-            $user = $this->users_model->get_user_by_username($username_input);
-            
-            $user_session = array(
-                'session_id' => $this->session->userdata('session_id'),
-                'username' => $this->input->post('username'),
-                'uid' => $user->uid,
-                'roles' => $user->roles,
-                'login' => TRUE,
-            );
-            $this->session->set_userdata($user_session);
+        {              
             return TRUE;
         }
        
@@ -99,27 +91,28 @@ class Login extends CI_Controller {
         return FALSE;     
     }
 
-    public function set_captcha(){
-        $vals = array(
-            'word'   => 'Random word',
-            'img_path'   => '../../assets/images/captcha/',
-            'img_url'    => base_url().'images/captcha/',
-            'font' => '../../system/fonts/texb.ttf',
-            'img_width'  => '150',
-            'img_height' => 30,
-            'expiration' => 7200,
-            "time" => time()
-           );
+    public function captcha_check($str, $captcha){
+        $x = 1;
+        if($str == $captcha){
+            return TRUE;
+        }
+        
+        $this->form_validation->set_message('captcha_check', "<div class = 'error_message'>Incorrect captcha!</div>");
+        return FALSE;
+    }
+    public function set_session(){
+        $username_input = $this->input->post('username');
+        
+        $this->load->library('session');
+        $user = $this->users_model->get_user_by_username($username_input);
 
-           $data['cap'] = create_captcha($vals);
-
-           $data = array(
-            'captcha_time'  => $vals['time'],
-            'ip_address'    => $this->input->ip_address(),
-            'word'   => $vals['word']
-           );
-           
-        $query = $this->db->insert_string('captcha', $data);
-        $this->db->query($query);
+        $user_session = array(
+            'session_id' => $this->session->userdata('session_id'),
+            'username' => $this->input->post('username'),
+            'uid' => $user->uid,
+            'roles' => $user->roles,
+            'login' => TRUE,
+        );
+        $this->session->set_userdata($user_session);
     }
 }
