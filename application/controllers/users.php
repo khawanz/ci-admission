@@ -18,6 +18,7 @@ class Users extends CI_Controller {
             $user_list = array();
             $i = 0;
             foreach($users as $user){
+                $user_list[$i]['uid'] = $user['uid'];
                 $user_list[$i]['username'] = $user['username'];
                 $user_list[$i]['status'] = ($user['status'])? 'Aktif':'Tidak Aktif';
                 
@@ -25,8 +26,10 @@ class Users extends CI_Controller {
                 if(count($userload->roles)){
                     $roles = '';
                     foreach($userload->roles as $us){
-                        $roles .= '- '.$us;
-                        $roles .= '<br/>';
+                        if($us != 'authenticated user'){
+                            $roles .= '- '.$us;
+                            $roles .= '<br/>';
+                        }                       
                     }
                 }
                 $user_list[$i]['roles'] = $roles;       
@@ -159,6 +162,42 @@ class Users extends CI_Controller {
 
         redirect('users');      
   
+    }
+    
+    public function edit($uid = null){
+        $this->load->helper(array('form', 'url','admission_helper'));       
+        
+        $this->load->library('form_validation');
+        
+         if(is_logged_in()){
+            $data['title'] = 'Edit User'; 
+            
+            $user = $this->users_model->get_user_by_uid($uid);
+            $data['user'] = $user;
+            
+            $roles = $this->users_model->get_roles();
+            $data['roles'] = $roles;
+            
+            $data_personal = $this->users_model->get_data_personal($uid);
+            $data['data_personal'] = is_null($data_personal[0])? null:$data_personal[0];
+            
+            $data_parent = $this->users_model->get_data_parent($uid);
+            $data['data_parent'] = is_null($data_parent[0])? null:$data_parent[0];
+            
+            $data_school = $this->users_model->get_data_school($uid);
+            $data['data_school'] = is_null($data_school[0])? null:$data_school[0];
+
+            $this->load->view('apps/template/header', $data);
+            $this->load->view('apps/template/nav_menu');           
+            $this->load->view('apps/edit_user',$data);
+            $this->load->view('apps/template/footer');
+        }
+        else{
+            $data['title'] = 'forbidden access';
+            $this->load->view('apps/template/header', $data);
+            $this->load->view('apps/notaccessed');
+            $this->load->view('apps/template/footer');
+        }  
     }
 }
 

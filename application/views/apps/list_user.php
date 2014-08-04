@@ -39,8 +39,8 @@
                                         <td>$user[username]</td>  
                                         <td>$user[status]</td> 
                                         <td>$user[roles]</td> 
-                                        <td><a href=".base_url()."users/edit/>edit</a></td>"; ?>                                         
-                                 <td><a href="<?php echo base_url().'users/delete/'; ?>" onclick='return confirm("Are you sure?");'>delete</a></td>  
+                                        <td><a href=".base_url()."users/edit/$user[uid]>edit</a></td>"; ?>                                         
+                                 <td><a href="<?php echo base_url()."users/delete/$user[uid]"; ?>" onclick='return confirm("Are you sure?");'>delete</a></td>  
                                      <?php "</tr>  ";
                                 
                              

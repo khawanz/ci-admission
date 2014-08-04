@@ -53,6 +53,58 @@ class Users_Model extends CI_Model{
         return $user;
     }
     
+    public function get_user_by_uid($uid){
+//        $this->db->select('*');
+//        $this->db->from('users');
+//        $this->db->join('users_roles', 'users_roles.uid=users.uid');
+//        $this->db->join('role', 'role.rid=users_roles.rid');
+//        $this->db->where('users.username', $username);
+//        $query = $this->db->get();
+        $query = $this->db->query(
+                'SELECT u.uid,username,password,email,created,r.rid,name as role_name FROM users u'
+                . ' LEFT JOIN users_roles ur ON u.uid=ur.uid'
+                . ' LEFT JOIN role r ON ur.rid=r.rid'
+                . " Where u.uid=".$uid);
+        $result = $query->result_array();
+
+        $user = NULL;
+        if($result){
+            $user->uid = $result[0]['uid'];
+            $user->username = $result[0]['username'];
+            $user->email = $result[0]['email'];
+            $user->password = $result[0]['password'];
+            $user->roles = array();
+            foreach($result as $data){
+//                if(!empty($data['rid']) && !empty($data['name'])){
+                    $user->roles[$data['rid']] = $data['role_name'];
+//                }
+                
+             }
+        }
+        
+        return $user;
+    }
+    
+    public function get_data_personal($uid){
+        $query = $this->db->get_where('data_personal',array('uid' => $uid));
+        return $query->result_array();
+    }
+    
+    public function get_data_parent($uid){
+         $query = $this->db->get_where('data_parent',array('uid' => $uid));
+        return $query->result_array();
+    }
+    
+    public function get_data_school($uid){
+         $query = $this->db->get_where('data_school',array('uid' => $uid));
+        return $query->result_array();
+    }
+    
+    public function get_roles(){
+        $query = $this->db->get('role');
+        return $query->result_array();
+    }
+    
     //@step2 : TRUE if created user has 'matriculant' role
     public function create_user($step2 = FALSE){
         $this->load->library('session');
@@ -137,10 +189,6 @@ class Users_Model extends CI_Model{
     
     public function update_users_roles($uid, $rid){
         return $this->db->insert('users_roles', array('rid' => $rid, 'uid' => $uid));
-    }
-    
-    public function get_roles(){
-        $query = $this->db->get('role');
-        return $query->result_array();
-    }
+    }   
+   
 }

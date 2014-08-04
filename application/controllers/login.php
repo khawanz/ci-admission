@@ -16,27 +16,7 @@ class Login extends CI_Controller {
         
         $this->load->library('form_validation');
         
-        $vals = array(
-            'word'   => random_string('alnum', 6),
-            'img_path'   => './captcha/',
-            'img_url'    => base_url().'captcha/',
-            'font' => './system/fonts/impact.ttf',          
-            'img_width'  => '100',
-            'img_height' => 50,
-            'expiration' => 180,
-            "time" => time()
-           );
-
-           $data['cap'] = create_captcha($vals);
-
-           $cap = array(
-            'captcha_time'  => $vals['time'],
-            'ip_address'    => $this->input->ip_address(),
-            'word'   => $vals['word']
-           );
-           
-        $query = $this->db->insert_string('captcha', $cap);
-        $this->db->query($query);
+        $captchaWord = $this->session->userdata('captchaWord');
         
         if(is_logged_in()){
             redirect(base_url().'home');
@@ -46,8 +26,8 @@ class Login extends CI_Controller {
         $this->form_validation->set_rules('password', 'Password', 'callback_password_check');
        // $this->form_validation->set_message('required', 'Your custom message here');
         $this->form_validation->set_error_delimiters("<div class='error-message'>", "</div>");
-        $this->form_validation->set_rules('captcha', 'captcha', 'callback_captcha_check['.$cap['word'].']');
-        $captcha_input = $this->input->post('captcha');
+        $this->form_validation->set_rules('captcha', 'captcha', 'callback_captcha_check['.$captchaWord.']');
+        
         if($this->form_validation->run() == TRUE)
         {   
             
@@ -58,10 +38,34 @@ class Login extends CI_Controller {
         } 
         else
         {
-                $data['title'] = 'Login';
-                $this->load->view('apps/template/header', $data);               
-                $this->load->view('apps/'.$page);
-                $this->load->view('apps/template/footer');
+            $vals = array(
+                'word'   => random_string('alnum', 6),
+                'img_path'   => './captcha/',
+                'img_url'    => base_url().'captcha/',
+                'font' => './system/fonts/impact.ttf',          
+                'img_width'  => '100',
+                'img_height' => 50,
+                'expiration' => 1800,
+                "time" => time()
+               );
+
+               $data['cap'] = create_captcha($vals);
+
+               $cap = array(
+                'captcha_time'  => $vals['time'],
+                'ip_address'    => $this->input->ip_address(),
+                'word'   => $vals['word']
+               );
+
+            $query = $this->db->insert_string('captcha', $cap);
+            $this->db->query($query);
+
+            $this->session->set_userdata('captchaWord',$cap['word']);
+            
+            $data['title'] = 'Login';
+            $this->load->view('apps/template/header', $data);               
+            $this->load->view('apps/'.$page);
+            $this->load->view('apps/template/footer');
                
         }
         
@@ -92,8 +96,7 @@ class Login extends CI_Controller {
     }
 
     public function captcha_check($str, $captcha){
-        $x = 1;
-        if($str == $captcha){
+        if(strtoupper($str) == strtoupper($captcha)){
             return TRUE;
         }
         
