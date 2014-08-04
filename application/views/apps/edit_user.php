@@ -155,6 +155,9 @@
                                 <p>
                                     <label>Agama
                                     </label>
+                                    <?php
+                                    $religions = array('islam','kristen','hindu','budha','katolik','lainnya');
+                                    ?>
                                     <select name="agama">
                                         <option value="islam">Islam</option>
                                         <option value="kristen">Kristen</option>
