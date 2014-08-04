@@ -53,8 +53,12 @@
                                     <?php 
                                         foreach($roles as $role):?>
                                            <p class="role">
-                                            <?php                                   
-                                                echo form_checkbox("roles[$role[rid]]",$role['name'], set_checkbox('roles', $role['name'])); 
+                                            <?php
+                                                $checked = FALSE;
+                                                if(in_array($role['name'], $user->roles)){
+                                                    $checked = TRUE;
+                                                }
+                                                echo form_checkbox("roles[$role[rid]]",$role['name'], $checked); 
                                                 echo $role['name'];
                                                 ?>
                                            </p>
@@ -82,9 +86,9 @@
                                 </p>
                                 <p>
                                     <label>Jenis Kelamin *</label>
-                                    <input type="radio" value="laki" name="sex" checked="<?php echo ($data_personal['dp_sex']=='l')?  TRUE:  FALSE; ?>"/>
+                                    <input type="radio" value="laki" name="sex" <?php echo ($data_personal['dp_sex']=='l')?  'checked':  null; ?>/>
                                     <label class="gender">Laki-laki</label>
-                                    <input type="radio" value="perempuan" name="sex" checked="<?php echo ($data_personal['dp_sex']=='p')?  TRUE:  FALSE; ?>"/>
+                                    <input type="radio" value="perempuan" name="sex" <?php echo ($data_personal['dp_sex']=='p')?  'checked': null; ?>/>
                                     <label class="gender">Perempuan</label>
                                 </p>
                                 <p>
@@ -148,8 +152,18 @@
                                     <label>Status
                                     </label>
                                     <select name="status">
-                                        <option value="1">Belum Menikah</option>
-                                        <option value="2">Menikah</option>
+                                        <?php
+                                        if($data_personal['dp_status'] == 'belum menikah'){
+                                            echo "<option value='belum menikah' selected>Belum Menikah</option>";
+                                            echo "<option value='menikah'>Menikah</option>";
+                                        }
+                                        else{
+                                            echo "<option value='belum menikah'>Belum Menikah</option>";
+                                            echo "<option value='menikah' selected>Menikah</option>";
+                                        }
+                                        ?>
+                                        
+                                        <option value="menikah" >Menikah</option>
                                     </select>
                                 </p>
                                 <p>
@@ -159,12 +173,19 @@
                                     $religions = array('islam','kristen','hindu','budha','katolik','lainnya');
                                     ?>
                                     <select name="agama">
-                                        <option value="islam">Islam</option>
-                                        <option value="kristen">Kristen</option>
-                                        <option value="hindu">Hindu</option>
-                                        <option value="budha">Budha</option>
-                                        <option value="katolik">Katolik</option>
-                                        <option value="lainnya">Lainnya</option>
+                                        <?php
+                                        foreach($religions as $religion){
+                                            $text_religion = ucfirst($religion);
+                                            if($data_personal['dp_religion'] == $religion){
+                                                echo "<option value='$religion' selected>$text_religion</option>";
+                                            }
+                                            else{
+                                                echo "<option value='$religion'>$text_religion</option>";
+                                            }
+                                            
+                                        }
+                                        ?>
+                                       
                                     </select>
                                 </p>                                
                                  <p>

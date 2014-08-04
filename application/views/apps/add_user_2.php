@@ -168,9 +168,9 @@
                                     <label>Status
                                     </label>
                                     <select name="status">
-                                        <option value="1">Belum Menikah
+                                        <option value="belum menikah">Belum Menikah
                                         </option>
-                                        <option value="2">Menikah
+                                        <option value="menikah">Menikah
                                         </option>
                                     </select>
                                 </p>
@@ -178,17 +178,17 @@
                                     <label>Agama
                                     </label>
                                     <select name="agama">
-                                        <option value="1">Islam
+                                        <option value="islam">Islam
                                         </option>
-                                        <option value="2">Kristen
+                                        <option value="kristen">Kristen
                                         </option>
-                                        <option value="3">Hindu
+                                        <option value="hindu">Hindu
                                         </option>
-                                        <option value="4">Budha
+                                        <option value="budha">Budha
                                         </option>
-                                        <option value="5">Katolik
+                                        <option value="katolik">Katolik
                                         </option>
-                                        <option value="6">Lainnya
+                                        <option value="lainnya">Lainnya
                                         </option>
                                     </select>
                                 </p>                                
