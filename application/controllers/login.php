@@ -30,7 +30,7 @@ class Login extends CI_Controller {
         
         if($this->form_validation->run() == TRUE)
         {   
-            
+            $this->session->unset_userdata('captchaWord');
             $this->set_session();
             redirect(base_url().'home');
  

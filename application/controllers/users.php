@@ -179,13 +179,13 @@ class Users extends CI_Controller {
             $data['roles'] = $roles;
             
             $data_personal = $this->users_model->get_data_personal($uid);
-            $data['data_personal'] = is_null($data_personal[0])? null:$data_personal[0];
+            $data['data_personal'] = isset($data_personal[0])? $data_personal[0]:null;
             
             $data_parent = $this->users_model->get_data_parent($uid);
-            $data['data_parent'] = is_null($data_parent[0])? null:$data_parent[0];
+            $data['data_parent'] = isset($data_parent[0])? $data_parent[0]:null;
             
             $data_school = $this->users_model->get_data_school($uid);
-            $data['data_school'] = is_null($data_school[0])? null:$data_school[0];
+            $data['data_school'] = isset($data_school[0])? $data_school[0]:null;
 
             $this->load->view('apps/template/header', $data);
             $this->load->view('apps/template/nav_menu');           
@@ -198,6 +198,37 @@ class Users extends CI_Controller {
             $this->load->view('apps/notaccessed');
             $this->load->view('apps/template/footer');
         }  
+    }
+    
+    public function update(){
+        $this->load->helper(array('form','url'));
+	$this->load->library('form_validation');	
+
+//	$this->form_validation->set_rules('gelombang', 'Gelombang', 'required');
+//	$this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+//        $this->form_validation->set_rules('time1', 'Jam Awal', 'required');
+//        $this->form_validation->set_rules('time2', 'Jam Selesai', 'required');
+//        $this->form_validation->set_error_delimiters("<div class='error-message'>", "</div>");
+    
+        $userbutton = $this->input->post('updateForm');
+        if($userbutton == 'updateButton'){
+            if ($this->form_validation->run() === FALSE)
+            {
+                    $this->edit();
+
+            }
+            else
+            {
+                $this->load->library('session');
+                $this->users_model->update_user();
+                $this->session->set_flashdata('success', 'Update user SUCCESS!');
+                
+                redirect('users');
+            }
+        }
+        else if($userbutton == 'cancelButton'){
+            redirect('users');
+        }	
     }
 }
 

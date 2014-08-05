@@ -168,10 +168,8 @@
                                     <label>Status
                                     </label>
                                     <select name="status">
-                                        <option value="belum menikah">Belum Menikah
-                                        </option>
-                                        <option value="menikah">Menikah
-                                        </option>
+                                        <option value="0">Belum Menikah</option>
+                                        <option value="1">Menikah</option>
                                     </select>
                                 </p>
                                 <p>
@@ -211,27 +209,23 @@
                                     <label>Jurusan
                                     </label>
                                     <select class="jurusan" name="jurusan">
-                                        <option value="ipa">IPA
-                                        </option>
-                                        <option value="ips">IPS
-                                        </option>
-                                        <option value="bahasa">Bahasa
-                                        </option>
+                                        <option value="ipa">IPA</option>
+                                        <option value="ips">IPS</option>
+                                        <option value="bahasa">Bahasa</option>
+                                        <option value="lainnya">Lainnya</option>
                                     </select>
                                     
                                     <label>Tahun Lulus
                                     </label>
                                     <select class="tahun-lulus" name="tahun_lulus">
-                                        <option value="2014">2014
-                                        </option>
-                                        <option value="2013">2013
-                                        </option>
-                                        <option value="2012">2012
-                                        </option>
-                                        <option value="2011">2011
-                                        </option>
-                                        <option value="2010">2010
-                                        </option>
+                                        <?php
+                                        $current_year = (int)date('Y');
+                                        $periode = 10;
+                                        $x = $current_year-$periode;
+                                        for($i = $current_year; $i > ($current_year-$periode); $i--){                                          
+                                            echo "<option value='$i'>$i</option>";                                           
+                                        }
+                                        ?>
                                     </select>
                                 </p>
                                 <p>
@@ -272,17 +266,17 @@
                                  <p>
                                     <label>Pendidikan</label>
                                     <select class="tahun-lulus" name="pendidikan_wali">
-                                        <option value="1">S3
+                                        <option value="s3">S3
                                         </option>
-                                        <option value="2">S2
+                                        <option value="s2">S2
                                         </option>
-                                        <option value="2">S1
+                                        <option value="s1">S1
                                         </option>
-                                        <option value="2">D3
+                                        <option value="d3">D3
                                         </option>
-                                        <option value="2">SMU
+                                        <option value="smu">SMU
                                         </option>
-                                        <option value="2">Lainnya
+                                        <option value="lainnya">Lainnya
                                         </option>
                                      </select>
                                 </p>

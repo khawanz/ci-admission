@@ -5,7 +5,7 @@
 </div>     
 <div class='menu-div'>
     <a href='<?php echo base_url(); ?>users'><div class='menu-list'>List</div></a>
-    <a href='#'><div class='menu-list'>Edit</div></a>
+    <a href='<?php echo base_url(); ?>users/add'><div class='menu-list'>Add</div></a>
 </div>
 
 <div id='container'>           
@@ -21,12 +21,14 @@
                         
                         <?php 
                         $attributes = array('class' => 'register');
-                        echo form_open('users/step2',$attributes) ?>
+                        echo form_open('users/update',$attributes) ?>
                             
                             
                             <fieldset class="row1">
-                                <legend>Account Details
-                                </legend>
+                                
+                            <input type='hidden' name="uid" value="<?php echo $user->uid;?>"/>
+                        
+                                <legend>Account Details</legend>
                                 <p>
                                     <label>Username *
                                     </label>
@@ -66,9 +68,18 @@
                                         endforeach;
                                     ?>
                                 </p>
-                                
+<!--                                 <p>
+                                    <label>Status *</label>
+                                    <input type="radio" value="1" name="status" <?php echo ($user->status)?  'checked':  null; ?>/>
+                                    <label class="gender">Aktif</label>
+                                    <input type="radio" value="0" name="status" <?php echo (!$user->status)?  'checked': null; ?>/>
+                                    <label class="gender">Non-aktif</label>
+                                </p>-->
                             </fieldset>
                             
+                        <?php
+                        if(isset($data_personal)):
+                        ?>
                             <h1>Complete Further Information</h1>
                             
                             <fieldset class="row2">
@@ -106,7 +117,7 @@
                                         $tahun = $tgl_lahir[0];
                                     }
                                      else{
-                                         $tanggal = 01;
+                                        $tanggal = 01;
                                         $bulan = 01;
                                         $tahun = 1990;
                                      }   
@@ -153,17 +164,16 @@
                                     </label>
                                     <select name="status">
                                         <?php
-                                        if($data_personal['dp_status'] == 'belum menikah'){
-                                            echo "<option value='belum menikah' selected>Belum Menikah</option>";
-                                            echo "<option value='menikah'>Menikah</option>";
+                                        
+                                        if(!$data_personal['dp_status']){
+                                            echo "<option value='0' selected>Belum Menikah</option>";
+                                            echo "<option value='1'>Menikah</option>";
                                         }
                                         else{
-                                            echo "<option value='belum menikah'>Belum Menikah</option>";
-                                            echo "<option value='menikah' selected>Menikah</option>";
+                                            echo "<option value='0'>Belum Menikah</option>";
+                                            echo "<option value='1' selected>Menikah</option>";
                                         }
-                                        ?>
-                                        
-                                        <option value="menikah" >Menikah</option>
+                                        ?>                                                                                
                                     </select>
                                 </p>
                                 <p>
@@ -191,7 +201,7 @@
                                  <p>
                                     <label>HP *
                                     </label>
-                                    <input type="text" maxlength="10" name="hp"  value="<?php echo empty($data_personal['dp_hp'])?'':$data_personal['dp_hp']; ?>"/>
+                                    <input type="text" name="hp"  value="<?php echo empty($data_personal['dp_hp'])?'':$data_personal['dp_hp']; ?>"/>
                                 </p>
                             </fieldset>
                             
@@ -201,49 +211,64 @@
                                 <p>
                                     <label>Sekolah Asal*
                                     </label>
-                                    <input type="text"  name="sekolah_asal"/>e.g. SMU N 35
+                                    <input type="text"  name="sekolah_asal" value="<?php echo empty($data_school['ds_asal'])?'':$data_school['ds_asal']; ?>"/>e.g. SMU N 35
                                 </p>
                                 <p>
                                     <label>Jurusan
                                     </label>
                                     <select class="jurusan" name="jurusan">
-                                        <option value="ipa">IPA
-                                        </option>
-                                        <option value="ips">IPS
-                                        </option>
-                                        <option value="bahasa">Bahasa
-                                        </option>
+                                        <?php
+                                        $data_school['ds_jurusan'] = isset($data_school['ds_jurusan'])? $data_school['ds_jurusan']:'ipa';
+                                        $jurusans = array('ipa','ips','bahasa','lainnya');
+                                        foreach($jurusans as $jurusan){
+                                            $text_jurusan = strtoupper($jurusan);
+                                            if($jurusan == $data_school['ds_jurusan']){                                           
+                                                echo "<option value='$jurusan' selected>$text_jurusan</option>";
+                                            }
+                                            else{
+                                                echo "<option value='$jurusan'>$text_jurusan</option>";
+                                            }
+                                        }
+                                        ?>
+                                        
                                     </select>
                                     
                                     <label>Tahun Lulus
                                     </label>
                                     <select class="tahun-lulus" name="tahun_lulus">
-                                        <option value="2014">2014
-                                        </option>
-                                        <option value="2013">2013
-                                        </option>
-                                        <option value="2012">2012
-                                        </option>
-                                        <option value="2011">2011
-                                        </option>
-                                        <option value="2010">2010
-                                        </option>
+                                        <?php
+                                        
+                                        $current_year = date('Y');
+                                        $data_school['ds_tahunlulus'] = 
+                                                isset($data_school['ds_tahunlulus'])?$data_school['ds_tahunlulus']:$current_year;
+                                        $periode = 10;
+                                        for($i = $current_year; $i>($current_year-$periode); $i--){
+                                            if($i == $data_school['ds_tahunlulus']){
+                                                echo "<option value='$i' selected>$i</option>";
+                                            }
+                                            else{
+                                                echo "<option value='$i'>$i</option>";
+                                            }
+                                        }
+                                        ?>
+                                        
                                     </select>
                                 </p>
                                 <p>
                                     <label>Alamat *
                                     </label>
-                                    <textarea cols="30" rows="3" name="alamat_sekolah"></textarea>
+                                    <textarea cols="30" rows="3" name="alamat_sekolah" ><?php echo empty($data_school['ds_alamat'])?'':trim($data_school['ds_alamat']); ?>
+                                    </textarea>
                                 </p>
                                 <p>
                                     <label>Kota
                                     </label>
-                                    <input type="text" name="kota_sekolah"/>
+                                    <input type="text" name="kota_sekolah" value="<?php echo empty($data_school['ds_kota'])?'':$data_school['ds_kota']; ?>"/>
                                 </p>
                                 <p>
                                     <label>Kode Pos
                                     </label>
-                                    <input class="year" type="text" size="8" name="kodepos_sekolah"/>
+                                    <input class="year" type="text" size="8" name="kodepos_sekolah" value="<?php echo empty($data_school['ds_kodepos'])?'':$data_school['ds_kodepos']; ?>"/>
                                 </p>
                                 
                             </fieldset>
@@ -256,117 +281,125 @@
                                     <select class="tahun-lulus" name="status_wali1">
                                          <option>-pilih-</option>
                                          <?php
+                                         $do_status = FALSE;
                                          if($data_parent['do_status'] == 'ayah'){
+                                             $do_status = TRUE;
                                              echo "<option value='ayah' selected>Ayah</option>
                                              <option value='ibu'>Ibu</option>";
                                          }
                                          else if($data_parent['do_status'] == 'ibu'){
+                                             $do_status = TRUE;
                                              echo "<option value='ayah'>Ayah</option>
                                              <option value='ibu' selected>Ibu</option>";
                                          }
                                          ?>
                                         
                                      </select>
-                                    <input type="text" name="status_wali2" placeholder="Lainnya sebutkan"/>
+                                    <input type="text" name="status_wali2" placeholder="Lainnya sebutkan" value="<?php echo ($do_status)?'':$data_parent['do_status']; ?>"/>
                                 </p>
                                 <p>
                                     <label>Nama *
                                     </label>
-                                    <input type="text" maxlength="10" name="nama_wali"/>
+                                    <input type="text" maxlength="10" name="nama_wali" value="<?php echo empty($data_parent['do_name'])?'':$data_parent['do_name']; ?>"/>
                                 </p>
                                  <p>
                                     <label>Pendidikan</label>
                                     <select class="tahun-lulus" name="pendidikan_wali">
-                                        <option value="1">S3
-                                        </option>
-                                        <option value="2">S2
-                                        </option>
-                                        <option value="2">S1
-                                        </option>
-                                        <option value="2">D3
-                                        </option>
-                                        <option value="2">SMU
-                                        </option>
-                                        <option value="2">Lainnya
-                                        </option>
+                                        <?php
+                                      
+                                        $data_parent['do_education'] =
+                                                isset($data_parent['do_education'])?$data_parent['do_education']:'s1';
+                                        $educations = array('s3','s2','s1','d3','smu','lainnya');
+                                        foreach($educations as $education){
+                                            $text_edu = strtoupper($education);
+                                            if($education == $data_parent['do_education']){                                               
+                                                echo "<option value='$education' selected>$text_edu</option>";
+                                            }
+                                            else{
+                                                echo "<option value='$education'>$text_edu</option>";
+                                            }
+                                        }
+                                        ?>
+                                       
                                      </select>
                                 </p>
                                 <p>
                                     <label>Pekerjaan
                                     </label>
-                                    <input type="text" maxlength="10" name="pekerjaan_wali"/>
+                                    <input type="text" maxlength="10" name="pekerjaan_wali" value="<?php echo empty($data_parent['do_job'])?'':$data_parent['do_job']; ?>"/>
                                 </p>
                                 <p>
                                     <label>Jabatan
                                     </label>
-                                    <input type="text" maxlength="10" name="jabatan_wali"/>
+                                    <input type="text" maxlength="10" name="jabatan_wali" value="<?php echo empty($data_parent['do_position'])?'':$data_parent['do_position']; ?>"/>
                                 </p>
                                 <p>
                                     <label>Telepon Kantor
                                     </label>
-                                    <input type="text" maxlength="10" name="telp_kantor_wali"/>
+                                    <input type="text" maxlength="10" name="telp_kantor_wali" value="<?php echo empty($data_parent['do_office_telp'])?'':$data_parent['do_office_telp']; ?>"/>
                                 </p>
                                 <p>
                                     <label>Telepon Rumah
                                     </label>
-                                    <input type="text" maxlength="10" name="telp_rumah_wali"/>
+                                    <input type="text" maxlength="10" name="telp_rumah_wali" value="<?php echo empty($data_parent['do_house_telp'])?'':$data_parent['do_house_telp']; ?>"/>
                                 </p>
                                 <p>
                                     <label>HP
                                     </label>
-                                    <input type="text" maxlength="10" name="hp_wali"/>
+                                    <input type="text" name="hp_wali" value="<?php echo empty($data_parent['do_hp'])?'':$data_parent['do_hp']; ?>"/>
                                 </p>
                                 <p>
                                     <label>Email
                                     </label>
-                                    <input type="text" maxlength="10" name="email_wali"/>
+                                    <input type="text" maxlength="10" name="email_wali" value="<?php echo empty($data_parent['do_email'])?'':$data_parent['do_email']; ?>"/>
                                 </p>
                                  <p>
                                     <label>Alamat *
                                     </label>
-                                     <textarea cols="30" rows="3" name="alamat_wali"></textarea>
+                                     <textarea cols="30" rows="3" name="alamat_wali"><?php echo empty($data_parent['do_address'])?'':trim($data_parent['do_address']); ?>
+                                     </textarea>
                                 </p>
                                 <p>
                                     <label>Kota
                                     </label>
-                                    <input type="text" name="kota_wali"/>
+                                    <input type="text" name="kota_wali" value="<?php echo empty($data_parent['do_city'])?'':$data_parent['do_city']; ?>"/>
                                 </p>
                                  <p>
                                     <label>Kode Pos
                                     </label>
-                                     <input class="year" type="text" size="8" name="kodepos_wali"/>
+                                     <input class="year" type="text" size="8" name="kodepos_wali" value="<?php echo empty($data_parent['do_zipcode'])?'':$data_parent['do_zipcode']; ?>"/>
                                 </p>
                                 <p>
                                     <label>Penghasilan Orang Tua *</label>
                                     <select name="penghasilan_wali">
-                                        <option selected="selected" value="1">0 - 999.999</option>
-                                        <option value="3">1.000.000 - 2.999.999</option>
-                                        <option value="5">3.000.000 - 4.999.999</option>
-                                        <option value="7">5.000.000 - 6.999.999</option>
-                                        <option value="10">7.000.000 - 9.999.999</option>
-                                        <option value="11">> 10.000.000</option>
+                                        <?php
+                                        $ranges = array(
+                                            1 => '0 - 999.999',
+                                            3 => '1.000.000 - 2.999.999',
+                                            5 => '3.000.000 - 4.999.999',
+                                            7 => '5.000.000 - 6.999.999',
+                                            10 => '7.000.000 - 9.999.999',
+                                            11 => '> 10.000.000',
+                                        );
+                                        foreach($ranges as $key => $range){
+                                            if($key == $do_parent['do_salary']){
+                                                echo "<option value=$key selected>$ranges[$key]</option>";
+                                            }
+                                            else{
+                                                echo "<option value=$key>$ranges[$key]</option>";
+                                            }
+                                        }
+                                        ?>
+                                        
                                      </select>
                                 </p>
 <!--                                <div class="infobox"><h4>Helpful Information</h4>
                                     <p>Here comes some explaining text, sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
                                 </div>-->
                             </fieldset>
-<!--                            <fieldset class="row4">
-                                <legend>Terms and Mailing
-                                </legend>
-                                <p class="agreement">
-                                    <input type="checkbox" value=""/>
-                                    <label>*  I accept the <a href="#">Terms and Conditions</a></label>
-                                </p>
-                                <p class="agreement">
-                                    <input type="checkbox" value=""/>
-                                    <label>I want to receive personalized offers by your site</label>
-                                </p>
-                                <p class="agreement">
-                                    <input type="checkbox" value=""/>
-                                    <label>Allow partners to send me personalized offers and related services</label>
-                                </p>
-                            </fieldset>-->
+                        <?php
+                            endif;
+                        ?>
                             <div>
                             <button type='submit' name='updateForm' class='button' value='updateButton' >Update</button>   
                             <button type='submit' name='updateForm' class='button' value='cancelButton' >Cancel</button> 

@@ -38,7 +38,7 @@
                                     <input type="text" name="email"/>                                  
                                 </p>
                                 <p>
-                                    <label>Password*
+                                    <label>Password *
                                     </label>
                                     <input type="password" name="password"/>
                                     <label>Repeat Password*
@@ -53,9 +53,17 @@
                                     <?php 
                                         foreach($roles as $role):?>
                                            <p class="role">
-                                            <?php                                   
-                                                echo form_checkbox("roles[$role[rid]]",$role['name'], set_checkbox('roles', $role['name'])); 
-                                                echo $role['name'];
+                                            <?php
+                                            $x = 1;
+                                                if($role['name'] == 'authenticated user'){
+                                                    echo form_checkbox("roles[$role[rid]]",$role['name'], TRUE); 
+                                                    echo $role['name'];
+                                                }
+                                                else if($role['name'] != 'anonymous user'){
+                                                    echo form_checkbox("roles[$role[rid]]",$role['name']); 
+                                                    echo $role['name'];
+                                                }
+                                                
                                                 ?>
                                            </p>
                                    <?php
