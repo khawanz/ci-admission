@@ -202,25 +202,34 @@ class Users extends CI_Controller {
     
     public function update(){
         $this->load->helper(array('form','url'));
-	$this->load->library('form_validation');	
+	$this->load->library(array('form_validation','session'));
+        
+         $uid = $this->input->post('uid');
 
-//	$this->form_validation->set_rules('gelombang', 'Gelombang', 'required');
-//	$this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
-//        $this->form_validation->set_rules('time1', 'Jam Awal', 'required');
-//        $this->form_validation->set_rules('time2', 'Jam Selesai', 'required');
-//        $this->form_validation->set_error_delimiters("<div class='error-message'>", "</div>");
+	$this->form_validation->set_rules('username', 'Username', 'trim|required|min_length[5]|max_length[12]|xss_clean');
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
+        $this->form_validation->set_rules('password', 'Password', 'trim||matches[passconf]');
+        $this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|');       
+        $this->form_validation->set_rules('roles', 'Role', 'required');
+        $this->form_validation->set_error_delimiters("<div class='error-message'>", "</div>");
     
         $userbutton = $this->input->post('updateForm');
         if($userbutton == 'updateButton'){
             if ($this->form_validation->run() === FALSE)
             {
-                    $this->edit();
+                    $this->edit($uid);
 
             }
             else
             {
+                
+                $roles = $this->users_model->get_roles_by_uid($uid);
+                $matriculant_role = FALSE;
+                if(in_array('matriculant', $roles)){
+                    $matriculant_role = TRUE;
+                }
                 $this->load->library('session');
-                $this->users_model->update_user();
+                $this->users_model->update_user($matriculant_role);
                 $this->session->set_flashdata('success', 'Update user SUCCESS!');
                 
                 redirect('users');
@@ -229,6 +238,38 @@ class Users extends CI_Controller {
         else if($userbutton == 'cancelButton'){
             redirect('users');
         }	
+    }
+    
+     public function delete($uid = null){    
+        $this->load->helper('url');     
+        $this->load->library('session');
+        
+        $this->users_model->delete_user($uid);
+
+        $this->session->set_flashdata('success', 'Success delete!');
+
+        redirect('users');
+    }
+    
+    public function profile($uid = null){
+        $this->load->helper(array('url','admission_helper'));       
+        $this->load->library('session');
+
+         $this->load->library('form_validation');
+        if(is_logged_in()){
+            $data['title'] = 'Profile';
+                       
+            $this->load->view('apps/template/header', $data);
+            $this->load->view('apps/template/nav_menu');
+            $this->load->view('apps/profile',$data);
+            $this->load->view('apps/template/footer');
+        }
+        else{
+            $data['title'] = 'forbidden access';
+            $this->load->view('apps/template/header', $data);          
+            $this->load->view('apps/notaccessed');
+            $this->load->view('apps/template/footer');
+        }
     }
 }
 

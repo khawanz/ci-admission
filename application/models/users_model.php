@@ -62,7 +62,7 @@ class Users_Model extends CI_Model{
 //        $this->db->where('users.username', $username);
 //        $query = $this->db->get();
         $query = $this->db->query(
-                'SELECT u.uid,username,password,email,created,r.rid, u.status as status,name as role_name '
+                'SELECT u.uid,username,password,email,created,r.rid, u.status,name as role_name '
                 . ' FROM users u'
                 . ' LEFT JOIN users_roles ur ON u.uid=ur.uid'
                 . ' LEFT JOIN role r ON ur.rid=r.rid'
@@ -75,7 +75,7 @@ class Users_Model extends CI_Model{
             $user->username = $result[0]['username'];
             $user->email = $result[0]['email'];
             $user->password = $result[0]['password'];
-            $user->password = $result[0]['status'];
+            $user->status = $result[0]['status'];
             $user->roles = array();
             foreach($result as $data){
 //                if(!empty($data['rid']) && !empty($data['name'])){
@@ -108,6 +108,24 @@ class Users_Model extends CI_Model{
         return $query->result_array();
     }
     
+     public function get_roles_by_uid($uid){
+        $query = $this->db->query(
+                'SELECT r.rid,name as role_name '
+                . ' FROM users u'
+                . ' LEFT JOIN users_roles ur ON u.uid=ur.uid'
+                . ' LEFT JOIN role r ON ur.rid=r.rid'
+                . " Where u.uid=".$uid);
+        
+        $result = array();
+        if($query->num_rows()>0){
+            foreach($query->result_array() as $row){
+                $result[$row['rid']] = $row['role_name'];
+            }
+        }
+        
+        return $result;
+    }
+    
     //@step2 : TRUE if created user has 'matriculant' role
     public function create_user($step2 = FALSE){
         $this->load->library('session');
@@ -121,6 +139,7 @@ class Users_Model extends CI_Model{
             'username' => $username,
             'password' => md5($this->input->post('password')),
             'email' => $this->input->post('email'),
+            'status' => 1,
             'created' => strtotime('now'),
         );
         $this->db->insert('users', $data_user);
@@ -128,7 +147,7 @@ class Users_Model extends CI_Model{
 
         //update users_roles -> user get roles and it should be save in db
         foreach($roles as $rid => $role_name){
-            $this->update_users_roles($user->uid, $rid);
+            $this->add_users_roles($user->uid, $rid);
         }       
                
         if($step2){        
@@ -190,35 +209,45 @@ class Users_Model extends CI_Model{
         
     }
     
-    public function update_users_roles($uid, $rid){
+    public function add_users_roles($uid, $rid){
         return $this->db->insert('users_roles', array('rid' => $rid, 'uid' => $uid));
     }   
    
-    public function update_user(){
+    public function update_user($matriculant_role){
         $this->load->library('session');
         
+        //user who login
         $user_id = (int)$this->session->userdata('uid');   
+        
+        //user who will be updated
+        $uid = $this->input->post('uid');
         $username = $this->input->post('username');
-        $roles = $this->input->post('roles');
-
+        $roles = $this->input->post('roles');       
         
         $data_user = array(
-            'username' => $username,
-            'password' => md5($this->input->post('password')),
+            'username' => $username,           
             'email' => $this->input->post('email'),
-            'created' => strtotime('now'),
+//            'status' => (int)$this->input->post('status'),
         );
-        $this->db->insert('users', $data_user);
-        $user = $this->get_user_by_username($username);
+        $this->db->where('uid',$uid);
+        $this->db->update('users',$data_user);
 
+        //check password.. if its field not empty then old password changed
+        $password = $this->input->post('password');
+        if(!empty($password)){
+            $this->db->where('uid',$uid);
+            $this->db->update('users', array('password' => md5($password)));
+        }
         //update users_roles -> user get roles and it should be save in db
+        //but first it has to delete from db
+        $this->db->where('uid', $uid);
+        $this->db->delete('users_roles'); 
         foreach($roles as $rid => $role_name){
-            $this->update_users_roles($user->uid, $rid);
+            $this->add_users_roles($uid, $rid);
         }       
                
-        if($step2){        
-            $data_sekolah = array(
-		'uid' => (int)$user->uid,
+        if($matriculant_role){        
+            $data_sekolah = array(		
 		'ds_asal' => $this->input->post('sekolah_asal'),
 		'ds_jurusan' => $this->input->post('jurusan'),
                 'ds_tahunlulus' => $this->input->post('tahun_lulus'),
@@ -228,12 +257,12 @@ class Users_Model extends CI_Model{
                 'changed_by' => $user_id,
                 'changed' => strtotime('now'),
             );
-            $this->db->insert('data_school', $data_sekolah);
+            $this->db->where('uid', $uid);
+            $this->db->update('data_school',$data_sekolah);
             
             $wali1 = $this->input->post('status_wali1');
             $wali2 = $this->input->post('status_wali2');
             $data_orangtua = array(
-                'uid' => (int)$user->uid,
                 'do_status' => empty($wali2)? $wali1:$wali1,
                 'do_name' => $this->input->post('nama_wali'),
                 'do_education' => $this->input->post('pendidikan_wali'),
@@ -250,12 +279,12 @@ class Users_Model extends CI_Model{
                 'changed_by' => $user_id,
                 'changed' => strtotime('now'),  
             );
-            $this->db->insert('data_parent', $data_orangtua);
+            $this->db->where('uid', $uid);
+            $this->db->update('data_parent',$data_orangtua);
             
             //date in mysql shold be 'y-m-d' eg.2014-12-31
             $birthdate = $this->input->post('tahun_lahir').'-'.$this->input->post('bulan_lahir').'-'.$this->input->post('tanggal_lahir');
-            $data_pribadi = array(
-                'uid' => (int)$user->uid,              
+            $data_pribadi = array(             
                 'dp_name' => $this->input->post('nama'),
                 'dp_nick' => $this->input->post('panggilan'),
                 'dp_birthplace' => $this->input->post('tempat_lahir'),
@@ -269,13 +298,10 @@ class Users_Model extends CI_Model{
                 'changed_by' => $user_id,
                 'changed' => strtotime('now'),  
             );
-            $this->db->insert('data_personal', $data_pribadi);
+            $this->db->where('uid', $uid);
+            $this->db->update('data_personal',$data_pribadi);
         }
 	
-        
- 
-        $this->db->where('uid', $sc_id);
-        $this->db->update('users', $data);
     }
     
     public function delete_user($uid){

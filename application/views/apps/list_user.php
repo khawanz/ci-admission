@@ -36,7 +36,7 @@
                              foreach($users as $user){                                
                                  echo "<tr>
                                         <td>$no</td>        
-                                        <td>$user[username]</td>  
+                                        <td><a href=".base_url()."users/profile/$user[uid]>$user[username]</a></td>  
                                         <td>$user[status]</td> 
                                         <td>$user[roles]</td> 
                                         <td><a href=".base_url()."users/edit/$user[uid]>edit</a></td>"; ?>                                         

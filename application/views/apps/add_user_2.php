@@ -58,9 +58,9 @@
                                 </p>
                                 <p>
                                     <label>Jenis Kelamin *</label>
-                                    <input type="radio" value="laki" name="sex"/>
+                                    <input type="radio" value="l" name="sex"/>
                                     <label class="gender">Laki-laki</label>
-                                    <input type="radio" value="perempuan" name="sex"/>
+                                    <input type="radio" value="p" name="sex"/>
                                     <label class="gender">Perempuan</label>
                                 </p>
                                 <p>
@@ -266,18 +266,12 @@
                                  <p>
                                     <label>Pendidikan</label>
                                     <select class="tahun-lulus" name="pendidikan_wali">
-                                        <option value="s3">S3
-                                        </option>
-                                        <option value="s2">S2
-                                        </option>
-                                        <option value="s1">S1
-                                        </option>
-                                        <option value="d3">D3
-                                        </option>
-                                        <option value="smu">SMU
-                                        </option>
-                                        <option value="lainnya">Lainnya
-                                        </option>
+                                        <option value="s3">S3</option>
+                                        <option value="s2">S2</option>
+                                        <option value="s1" selected>S1</option>
+                                        <option value="d3">D3</option>
+                                        <option value="smu">SMU</option>
+                                        <option value="lainnya">Lainnya</option>
                                      </select>
                                 </p>
                                 <p>

@@ -56,12 +56,16 @@
                                         foreach($roles as $role):?>
                                            <p class="role">
                                             <?php
-                                                $checked = FALSE;
+                                                
                                                 if(in_array($role['name'], $user->roles)){
-                                                    $checked = TRUE;
+                                                   echo form_checkbox("roles[$role[rid]]",$role['name'], TRUE); 
+                                                   echo $role['name'];
                                                 }
-                                                echo form_checkbox("roles[$role[rid]]",$role['name'], $checked); 
-                                                echo $role['name'];
+                                                 else if($role['name'] != 'anonymous user'){
+                                                    echo form_checkbox("roles[$role[rid]]",$role['name']); 
+                                                    echo $role['name'];
+                                                }
+                                                
                                                 ?>
                                            </p>
                                    <?php
@@ -69,11 +73,11 @@
                                     ?>
                                 </p>
 <!--                                 <p>
-                                    <label>Status *</label>
+                                    <label>Status *</label>                                   
                                     <input type="radio" value="1" name="status" <?php echo ($user->status)?  'checked':  null; ?>/>
-                                    <label class="gender">Aktif</label>
-                                    <input type="radio" value="0" name="status" <?php echo (!$user->status)?  'checked': null; ?>/>
-                                    <label class="gender">Non-aktif</label>
+                                    <label class="gender" >Aktif</label>
+                                    <input type="radio" value="0" name="status" <?php echo (!$user->status)?  'checked':  null; ?>/>
+                                    <label class="gender" >Non-aktif</label>
                                 </p>-->
                             </fieldset>
                             
@@ -97,9 +101,9 @@
                                 </p>
                                 <p>
                                     <label>Jenis Kelamin *</label>
-                                    <input type="radio" value="laki" name="sex" <?php echo ($data_personal['dp_sex']=='l')?  'checked':  null; ?>/>
+                                    <input type="radio" value="l" name="sex" <?php echo ($data_personal['dp_sex']=='l')?  'checked':  null; ?>/>
                                     <label class="gender">Laki-laki</label>
-                                    <input type="radio" value="perempuan" name="sex" <?php echo ($data_personal['dp_sex']=='p')?  'checked': null; ?>/>
+                                    <input type="radio" value="p" name="sex" <?php echo ($data_personal['dp_sex']=='p')?  'checked': null; ?>/>
                                     <label class="gender">Perempuan</label>
                                 </p>
                                 <p>
@@ -351,7 +355,7 @@
                                 <p>
                                     <label>Email
                                     </label>
-                                    <input type="text" maxlength="10" name="email_wali" value="<?php echo empty($data_parent['do_email'])?'':$data_parent['do_email']; ?>"/>
+                                    <input type="text" name="email_wali" value="<?php echo empty($data_parent['do_email'])?'':$data_parent['do_email']; ?>"/>
                                 </p>
                                  <p>
                                     <label>Alamat *
@@ -382,7 +386,8 @@
                                             11 => '> 10.000.000',
                                         );
                                         foreach($ranges as $key => $range){
-                                            if($key == $do_parent['do_salary']){
+                                            $x = 1;
+                                            if($key == (int)$data_parent['do_salary']){
                                                 echo "<option value=$key selected>$ranges[$key]</option>";
                                             }
                                             else{
