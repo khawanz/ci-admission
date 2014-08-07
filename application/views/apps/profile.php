@@ -36,9 +36,9 @@
                             
                         <div id="tabmenu">
                             <ul>
-                                <li id="nav-personal"><a href="#">Data Pribadi</a></li>
-                                <li id="nav-parent" class="onlink"><a href="#"  class="onlink">Data Orangtua</a></li>
-                                <li id="nav-school"><a href="#">Data Sekolah</a></li>
+                                <li id="nav-personal"><a href="#" rev="data_personal.php">Pribadi</a></li>
+                                <li id="nav-parent" class="onlink"><a href="#"  class="onlink" rev="data_parent.php">Orangtua</a></li>
+                                <li id="nav-school"><a href="#" rev="data_school.php">Sekolah</a></li>
                                 <li id="nav-mark"><a href="#">Nilai</a></li>
                                 <li id="nav-others"><a href="#">Lain-lain</a></li>
                             </ul>
@@ -51,6 +51,45 @@
         </div>
     
 		
-    <script type="text/javascript">
-        
-    </script>
+    <script src="<?php echo base_url(); ?>/assets/css/jquery-1.11.1.min.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                 
+                 function buka(){                      
+                    var dir = $('#tabmenu a').attr('rev');alert(dir);
+                    //$("#result").html("<img src='img/ajax-loader.gif'/>");
+                     $.ajax({
+                        type:"post",
+                        url:"<?php echo base_url(); ?>/application/views/apps/"+dir,
+                        data:"judul=tes",
+                        success:function(data){
+                            $("#profile-content").html(data);
+                         }
+                      });
+                                        
+                 }
+
+                  $("#nav-personal a").click(function(){
+                  	buka();
+                  });
+                  
+                   $("#nav-school a").click(function(){
+                  	buka();
+                  });
+                  
+                  $("#nav-parent a").click(function(){
+                  	 buka();
+                         $("a").removeClass("onlink");
+                         $(this).addClass("onlink");
+                         $("nav-parent li").addClass("onlink");
+                  });
+
+//                  $('#search').keyup(function(e) {
+//                     if(e.keyCode == 13) {
+//                        search();
+//                      }
+//                  });
+            });
+            
+            
+        </script>

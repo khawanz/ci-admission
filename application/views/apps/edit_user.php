@@ -201,7 +201,34 @@
                                         ?>
                                        
                                     </select>
-                                </p>                                
+                                </p>    
+                                <p>
+                                    <label>Golongan Darah
+                                    </label>
+                                    <?php
+                                    $bloods = array(
+                                       'a' => 'A',
+                                        'b' => 'B',
+                                        'ab' => 'AB',
+                                        'o' => 'O',                                       
+                                        );
+                                    ?>
+                                    <select name="golongan_darah">
+                                        <?php
+                                        foreach($bloods as $blood){
+                                            $text_blood = ucfirst($blood);
+                                            if($data_personal['dp_blood'] == $blood){
+                                                echo "<option value='$blood' selected>$text_blood</option>";
+                                            }
+                                            else{
+                                                echo "<option value='$blood'>$text_blood</option>";
+                                            }
+                                            
+                                        }
+                                        ?>
+                                       
+                                    </select>
+                                </p>  
                                  <p>
                                     <label>HP *
                                     </label>

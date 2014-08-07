@@ -189,7 +189,18 @@
                                         <option value="lainnya">Lainnya
                                         </option>
                                     </select>
-                                </p>                                
+                                </p> 
+                                <p>
+                                    <label>Golongan Darah
+                                    </label>
+                                    <select name="golongan_darah">
+                                        <option value="a">A</option>
+                                        <option value="b">B</option>
+                                        <option value="ab">AB</option>
+                                        <option value="o">O</option>
+                                       
+                                    </select>
+                                </p>      
                                  <p>
                                     <label>HP *
                                     </label>
