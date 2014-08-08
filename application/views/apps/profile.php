@@ -22,22 +22,24 @@
                             <!--<span>Please fill all the texts in the fields.</span>-->
                         </h1>
                         <label>
-                            Username : Hadik                          
+                            Username : <?php echo $user->username; ?>                         
                         </label><br/>
                          <label>
-                            Email : Hadi@yahoo.com                            
+                             Email : <?php 
+                             $x = json_encode($parent); 
+                             echo $user->email;?>                         
                         </label><br/>
                         <label>
-                            Status : Aktif                            
+                            Status : <?php echo ($user->status)? 'Aktif':'Nonaktif'; ?>                            
                         </label><br/>
-                        
+                        <input type="hidden" id="uid" name="uid" value="<?php echo $user->uid; ?>"/>
                                                
                         <?php echo form_close(); ?>
                             
                         <div id="tabmenu">
                             <ul>
                                 <li id="nav-personal"><a href="#" rev="data_personal.php">Pribadi</a></li>
-                                <li id="nav-parent" class="onlink"><a href="#"  class="onlink" rev="data_parent.php">Orangtua</a></li>
+                                <li id="nav-parent"><a href="#" rev="data_parent.php">Orangtua</a></li>
                                 <li id="nav-school"><a href="#" rev="data_school.php">Sekolah</a></li>
                                 <li id="nav-mark"><a href="#">Nilai</a></li>
                                 <li id="nav-others"><a href="#">Lain-lain</a></li>
@@ -55,13 +57,14 @@
         <script type="text/javascript">
             $(document).ready(function(){
                  
-                 function buka(){                      
-                    var dir = $('#tabmenu a').attr('rev');alert(dir);
-                    //$("#result").html("<img src='img/ajax-loader.gif'/>");
+                 function buka(classname){                      
+                    var dir = $(classname).attr('rev');
+                    var uid = $("#uid").val();
+                    var personal = <?php echo $personal; ?>;alert(personal);
                      $.ajax({
                         type:"post",
                         url:"<?php echo base_url(); ?>/application/views/apps/"+dir,
-                        data:"judul=tes",
+                        data:"parent="+parent,
                         success:function(data){
                             $("#profile-content").html(data);
                          }
@@ -70,18 +73,27 @@
                  }
 
                   $("#nav-personal a").click(function(){
-                  	buka();
-                  });
-                  
-                   $("#nav-school a").click(function(){
-                  	buka();
-                  });
+                  	buka("#nav-personal a");
+                         $("a").removeClass("onlink");
+                         $("li").removeClass("onlink");
+                         $(this).addClass("onlink");
+                         $("#nav-personal").addClass("onlink");
+                  });                                 
                   
                   $("#nav-parent a").click(function(){
-                  	 buka();
+                  	 buka("#nav-parent a");
+                          $("li").removeClass("onlink");
                          $("a").removeClass("onlink");
                          $(this).addClass("onlink");
-                         $("nav-parent li").addClass("onlink");
+                         $("#nav-parent").addClass("onlink");
+                  });
+                  
+                  $("#nav-school a").click(function(){
+                  	buka("#nav-school a");
+                         $("li").removeClass("onlink");
+                        $("a").removeClass("onlink");
+                         $(this).addClass("onlink");
+                         $("#nav-school").addClass("onlink");
                   });
 
 //                  $('#search').keyup(function(e) {

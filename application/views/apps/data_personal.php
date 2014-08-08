@@ -1,4 +1,6 @@
 <?php
-$var = $_POST['judul'];
-echo "<p>Data Pribadi</p> $var";
+$uid = $_POST['parent'];
+
+$x = 1;
+echo "<p>Data Pribadi</p>";
 

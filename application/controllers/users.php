@@ -258,7 +258,16 @@ class Users extends CI_Controller {
          $this->load->library('form_validation');
         if(is_logged_in()){
             $data['title'] = 'Profile';
-                       
+            $user = $this->users_model->get_user_by_uid($uid);
+            $personal = $this->users_model->get_data_personal($uid);
+            $parent = $this->users_model->get_data_parent($uid);
+            $school = $this->users_model->get_data_school($uid);
+            
+            $data['user'] = $user;
+            $data['personal'] = isset($personal)? json_encode($personal[0]):null;
+            $data['parent'] = isset($parent)?$parent[0]:null;
+            $data['school'] = isset($school)?$school[0]:null;
+            
             $this->load->view('apps/template/header', $data);
             $this->load->view('apps/template/nav_menu');
             $this->load->view('apps/profile',$data);
