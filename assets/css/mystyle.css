@@ -802,3 +802,47 @@ p.agreement label{
       color:#333;
   //border-bottom:1px solid #FFF; 
  } 
+
+ // Menu Drop Down
+ #menu-drop-down  ul {
+      float: left; 
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      width: 100%;
+      background-color: green;
+   }
+
+   #menu-drop-down > ul > li {
+      float: left;
+      position: relative;
+      height: 20px;
+      width: 130px;
+   }
+
+   .utama a {
+      font-family: arial, helvetica, sans-serif;
+      color: yellow;
+      height: 20px;
+      padding-left: 8px;
+      padding-right: 8px;
+      text-decoration: none;
+   }
+
+   .utama ul {
+      list-style: none;
+      display: none;
+      position: absolute;
+   }
+
+   .utama:hover ul {
+      display: block;   
+   }
+
+   .utama li {
+      background: #6d9931;
+   } 
+
+   .utama li:hover {
+      background: #003300;
+   }   

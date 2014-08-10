@@ -264,9 +264,9 @@ class Users extends CI_Controller {
             $school = $this->users_model->get_data_school($uid);
             
             $data['user'] = $user;
-            $data['personal'] = isset($personal)? json_encode($personal[0]):null;
-            $data['parent'] = isset($parent)?$parent[0]:null;
-            $data['school'] = isset($school)?$school[0]:null;
+            $data['personal'] = isset($personal[0])?$personal[0]:null;           
+            $data['parent'] = isset($parent[0])?$parent[0]:null;
+            $data['school'] = isset($school[0])?$school[0]:null;
             
             $this->load->view('apps/template/header', $data);
             $this->load->view('apps/template/nav_menu');

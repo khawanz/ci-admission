@@ -39,7 +39,7 @@ class Login extends CI_Controller {
         else
         {
             $vals = array(
-                'word'   => random_string('alnum', 6),
+                'word'   => random_string('alnum', 5),
                 'img_path'   => './captcha/',
                 'img_url'    => base_url().'captcha/',
                 'font' => './system/fonts/impact.ttf',          
