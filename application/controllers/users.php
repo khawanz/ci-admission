@@ -280,5 +280,15 @@ class Users extends CI_Controller {
             $this->load->view('apps/template/footer');
         }
     }
+    
+    public function register(){
+        $this->load->helper(array('form', 'url','admission_helper'));       
+ 
+        $data['title'] = 'Registration';                     
+
+        $this->load->view('apps/template/header', $data);
+        $this->load->view('apps/registration');
+        $this->load->view('apps/template/footer');      
+    }
 }
 

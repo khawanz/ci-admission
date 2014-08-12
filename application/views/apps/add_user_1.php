@@ -1,8 +1,8 @@
 <link rel='stylesheet' media='all' type='text/css' href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' />
 <link rel='stylesheet' media='all' type='text/css' href='<?php echo base_url(); ?>/assets/css/jquery-ui-timepicker-addon.css' />
-<div id='breadcrumb'>
+<!--<div id='breadcrumb'>
     <a href='#'>users</a> » add-user
-</div>     
+</div>     -->
 <div class='menu-div'>
     <a href='<?php echo base_url(); ?>users'><div class='menu-list'>List</div></a>
     <a href='#'><div class='menu-list'>Add</div></a>

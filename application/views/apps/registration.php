@@ -3,43 +3,43 @@
 <!--<div id='breadcrumb'>
     <a href='#'>users</a> » add-user
 </div>     -->
-<div class='menu-div'>
-    <a href='<?php echo base_url(); ?>users'><div class='menu-list'>List</div></a>
-    <a href='#'><div class='menu-list'>Add</div></a>
-</div>
 
 <div id='container'>           
-                  
+          <div id="nonavigation"></div> 
             <div id='content-container'>
-<!--                    <div id='section-navigation'>
-                            <ul>
-                                  
-                            </ul>
-                    </div>-->
+                <h1>Registration</h1>
                     <div id='content'>
                         <?php echo validation_errors();?>
                         
                         <?php 
                         $attributes = array('class' => 'register');
                         echo form_open('users/step2',$attributes) ?>
-                            <!--HIDDEN VALUE from previous step-->
-                            <input type="hidden" name="username" value="<?php echo $username ?>"/>
-                            <input type="hidden" name="email" value="<?php echo $email ?>"/>
-                            <input type="hidden" name="password" value="<?php echo $password ?>"/>
-                            <div style="display: none">
-                            <?php 
-                                foreach($roles as $rid => $role):?>
-                                   <p class="role">
-                                    <?php
-                                        echo form_checkbox("roles[$rid]",$role, set_checkbox('roles', $role),TRUE); 
-                                        echo $role;
-                                        ?>
-                                   </p>
-                           <?php
-                                endforeach;
-                            ?>
-                           </div>
-                            <!--END OF HIDDEN VALUE-->
+                          
+                            <fieldset class="row1">
+                                <legend>Account Details
+                                </legend>
+                                <p>
+                                    <label>Username *
+                                    </label>
+                                    <input type="text" name="username"/>
+                                </p>
+                                <p>
+                                    <label>Email *
+                                    </label>
+                                    <input type="text" name="email"/>                                  
+                                </p>
+                                <p>
+                                    <label>Password *
+                                    </label>
+                                    <input type="password" name="password"/>
+                                    <label>Repeat Password*
+                                    </label>
+                                    <input type="password" name="passconf"/>  
+                                    <label class="obinfo">* obligatory fields
+                                    </label>
+                                </p>
+                                                               
+                            </fieldset>
                             
                             <h1>Complete Further Information</h1>
                             
@@ -361,7 +361,7 @@
                                     <label>Allow partners to send me personalized offers and related services</label>
                                 </p>
                             </fieldset>-->
-                            <div><button class="button">Create &raquo;</button></div>
+                            <div><button class="button">Daftar</button></div>
                         </form>
                             
                         
