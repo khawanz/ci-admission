@@ -35,6 +35,7 @@
 	background: #800000;
         text-align: right;
         height: 30px;
+        border-bottom: 1px solid orange;
 }
 
 #logout-text a{
