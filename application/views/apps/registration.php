@@ -39,9 +39,7 @@
                                     </label>
                                 </p>
                                                                
-                            </fieldset>
-                            
-                            <h1>Complete Further Information</h1>
+                            </fieldset>                                                       
                             
                             <fieldset class="row2">
                                 <legend>Data Pribadi

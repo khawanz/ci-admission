@@ -28,20 +28,6 @@
 	background: #800000;
 }
 
-/*
-.navigation
-{
-	//float: left;
-	//width: 1200px;
-	background: #800000;
-        text-align: right;
-        height: 30px;
-<<<<<<< HEAD
-        border-bottom: 1px solid orange;
-}
-=======
-}*/
->>>>>>> bbf746fbf1bc60cda7cb0206b4b7196d90cf4140
 
 #logout-text a{
     float: right;
@@ -151,7 +137,7 @@
 #content-container
 {
 	float: left;
-	width: 1000px;
+	width: 100%;
 	/*background: #fff url(/wp-content/uploads/layout-three-fixed-background.gif) repeat-y 100% 0;*/
          margin-top: 5px;
 }
@@ -162,7 +148,9 @@
 	width: 160px;
 	padding: 20px 0;
 	margin: 0 20px;
-	display: inline;       
+	display: inline;  
+        border-right: 1px solid #dddddd;
+        height: auto
 }
 
 #section-navigation ul
@@ -178,6 +166,18 @@
 	list-style-type: none;
 }
 
+#section-navigation input{
+    margin: 5px;
+}
+
+#main-content
+{
+	float: left;
+	width: 75%;
+	padding: 0;
+	margin: 0;
+	display: inline;         
+}
 .menu-div{
     margin: 5px;
     float: left;
@@ -234,13 +234,13 @@
 }
 
 #captcha{
-    margin: 10px 0 10px 170px;
+    margin: 10px 0 5px 0px;
     padding: 5px;
     font-size: 12px;
     font-weight: bold;
     width: 150px;
     height: 100px;
-    border: 1px solid #800000;
+    //border: 1px solid #800000;
     //text-align: center
 }
 

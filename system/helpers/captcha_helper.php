@@ -125,7 +125,7 @@ if ( ! function_exists('create_captcha'))
 
 		$length	= strlen($word);
 		$angle	= ($length >= 6) ? rand(-($length-6), ($length-6)) : 0;
-		$x_axis	= rand(6, (360/$length)-50);
+		$x_axis	= rand(6, (360/$length)-60);
 		$y_axis = ($angle >= 0 ) ? rand($img_height, $img_width) : rand(6, $img_height);
 
 		// -----------------------------------

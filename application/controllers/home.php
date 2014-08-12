@@ -17,10 +17,7 @@ class Home extends CI_Controller {
             $this->load->view('apps/template/footer');
         }
         else{
-            $data['title'] = 'forbidden access';
-            $this->load->view('apps/template/header', $data);          
-            $this->load->view('apps/notaccessed');
-            $this->load->view('apps/template/footer');
+            redirect(base_url().'login');
         }
 
     }
