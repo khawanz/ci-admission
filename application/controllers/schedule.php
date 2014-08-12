@@ -54,7 +54,7 @@ class Schedule extends CI_Controller {
     }
     
     public function create(){
-        $this->load->helper('form');
+        $this->load->helper(array('form', 'url','admission_helper'));    
 	$this->load->library('form_validation');
 
 	$this->form_validation->set_rules('gelombang', 'Gelombang', 'required');

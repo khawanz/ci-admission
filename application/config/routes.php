@@ -40,6 +40,8 @@
 
 $route['default_controller'] = "login";
 $route['logout'] = 'login/logout';
+$route['ub/departement/add'] = 'ub/add_departement';
+$route['ub/departement/edit/(:num)'] = 'ub/edit_departemen/$1';
 $route['404_override'] = '';
 
 

@@ -1,8 +1,6 @@
 <link rel='stylesheet' media='all' type='text/css' href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' />
 <link rel='stylesheet' media='all' type='text/css' href='<?php echo base_url(); ?>/assets/css/jquery-ui-timepicker-addon.css' />
-<div id='breadcrumb'>
-    <a href='#'>users</a> » profile
-</div>     
+    
 <!--<div class='menu-div'>
     <a href='<?php echo base_url(); ?>schedule'><div class='menu-list'>List</div></a>
     <a href='#'><div class='menu-list'>Add</div></a>
@@ -46,12 +44,12 @@
 
                                 <!--Data Pribadi-->
                                <div id="tabs-1">
-                                      <p>Nama: <?php echo $personal['dp_name'];?></p>
+                                      <p>Nama: <b><?php echo $personal['dp_name'];?></b></p>
                                       <p>Panggilan: <?php echo $personal['dp_nick'];?></p>
                                       <p>Tempat/Tanggal Lahir: 
                                           <?php 
                                             $tanggal_lahir = date('d M Y', strtotime($personal['dp_birthdate']));
-                                            echo $personal['dp_birthplace'].', '.$personal['dp_birthdate'];
+                                            echo $personal['dp_birthplace'].', '.$tanggal_lahir;
                                           ?></p>
                                       <p>Agama: <?php echo $personal['dp_religion'];?></p>
                                       <p>Jenis Kelamin: <?php echo ($personal['dp_sex']=='l')?'Laki-laki':'Perempuan';?></p>
@@ -96,11 +94,16 @@
                                          banyak bermain film di Bollywood.</p>
                                </div>
                             </div>
-                        <?php endif; ?>
-
-                        <div id="profile-content">
-                            
-                    </div>
+                        <?php endif; 
+                        
+//                        $personal2 = array('personal' => $personal);
+                      
+                        ?>
+<!--                        <input id="personal" type="hidden" 
+                               value="<?php echo $personal; ?>"/>
+                        <div id="nav-personal"><a href="#" rev="data_personal.php">Personal</a></div>
+                        
+                        <div id="profile-content"> test </div>-->
                    
             </div>
         </div>
@@ -116,22 +119,22 @@ href="<?php echo base_url(); ?>/assets/css/jquery-ui-1.8.11.custom.css" />
       $("#star").tabs();
    });
 </script>        
-<!--
-    
+
+<!--    
     <script src="<?php echo base_url(); ?>/assets/css/jquery-1.11.1.min.js" type="text/javascript"></script>
         <script type="text/javascript">
             $(document).ready(function(){
                  
                  function buka(classname){                      
                     var dir = $(classname).attr('rev');
-                    var uid = $("#uid").val();
-                    var personal = <?php echo $personal; ?>;alert(uid);
+                    //var personal = $("#personal").val();alert(personal);
+                    var pers = <?php echo json_encode($personal2); ?>;
                      $.ajax({
                         type:"post",
                         url:"<?php echo base_url(); ?>/application/views/apps/"+dir,
-                        data:"parent="+uid,
-                        success:function(data){
-                            $("#profile-content").html(data);
+                        data:pers,
+                        success:function(result){
+                            $("#profile-content").html(result);
                          }
                       });
                                         

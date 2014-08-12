@@ -33,7 +33,7 @@ and open the template in the editor.
                             <input type="text" name="captcha" size="10">
                         </div>
                         <?php echo form_submit('submit', 'Login!');?>
-
+                        <div><a href="<?php echo base_url().'users/register';?>">Register?</a></div>
                      <?php echo form_close();?>
                              
                     </div>
